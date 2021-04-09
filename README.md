@@ -36,6 +36,9 @@ Note: Newer versions of the requirements should work, but was not tested.
 python3.7 -m venv ca_mtl_env
 source ca_mtl_env/bin/activate 
 
+# Update pip to meet sentencepiece requirement
+pip install -U pip
+
 # Install the requirements
 pip install requirements-with-torch.txt
 # If you are using an environment that have torch already installed use "requirements.txt"
