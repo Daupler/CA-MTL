@@ -141,5 +141,7 @@ class CaMtl(BertPreTrainedModel):
             return "bert-large-cased"
         elif model_name_or_path == "CA-MTL-base":
             return "bert-base-cased"
+        elif model_name_or_path == "CA-MTL-tiny":
+            return 'huawei-noah/TinyBERT_General_6L_768D'
         else:
             return model_name_or_path
