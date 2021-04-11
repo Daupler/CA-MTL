@@ -3,7 +3,7 @@ import numpy
 from scipy.stats import entropy
 from torch.nn import MSELoss, CrossEntropyLoss, Softmax, Dropout, Linear, Softmax
 
-from data.task_data_processors import tasks_num_labels
+from src.data.task_data_processors import tasks_num_labels
 
 class Decoder(torch.nn.Module):
     def __init__(self, hidden_size, task_name):
