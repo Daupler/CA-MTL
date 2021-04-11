@@ -24,21 +24,21 @@ class MultiTaskDataArguments:
     """
 
     data_dir: str = field(
-        required=True,
+        default=None,
         metadata={
-            "help": "The input data dir. Should contain the .tsv files (or other data files) for the task."
+            "help": "The input data dir. Should contain the task folders references in task_data_folders"
         }
     )
     tasks: List[str] = field(
-        default=None, required=True,
+        default=None,
         metadata={
             "help": "The task file that contains the tasks to train on. Must be provided"
         },
     )
     task_data_folders: List[str] = field(
-        default=None, required=True,
+        default=None,
         metadata={
-            "help": "The task folders that contain the data for the tasks to train on. Must be provided"
+            "help": "The task folders that contain the data for the tasks to train on. Should contain .tsv files for each split for the task. Must be provided"
         },
     )
     overwrite_cache: bool = field(
