@@ -88,7 +88,8 @@ docker run -v /data:$DATA_DIR $DOCKER_IMG --model_name_of_path CA-MTL-base --dat
 ### Usage 
 ```
 usage: run.py [-h] --model_name_or_path MODEL_NAME_OR_PATH --data_dir DATA_DIR
-              [--tasks TASKS [TASKS ...]] [--overwrite_cache]
+              [--tasks TASKS [TASKS ...]] [--task_data_folders TASKS [TASK_DATA_FOLDERS ...]] 
+              [--overwrite_cache]
               [--max_seq_length MAX_SEQ_LENGTH] --output_dir OUTPUT_DIR
               [--overwrite_output_dir] [--do_train] [--do_eval] [--do_predict]
               [--evaluate_during_training]
@@ -108,7 +109,7 @@ usage: run.py [-h] --model_name_or_path MODEL_NAME_OR_PATH --data_dir DATA_DIR
               [--tpu_num_cores TPU_NUM_CORES] [--tpu_metrics_debug]
               [--use_mt_uncertainty]
 
-optional arguments:
+arguments:
   -h, --help            show this help message and exit
  --model_name_or_path MODEL_NAME_OR_PATH
                         Path to pretrained model or model identifier from: CA-
@@ -119,6 +120,9 @@ optional arguments:
   --tasks TASKS [TASKS ...]
                         The task file that contains the tasks to train on. If
                         None all tasks will be used
+  --task_data_folders TASK_DATA_FOLDERS [TASK_DATA_FOLDERS ...]
+                        The folders where the data lies for your tasks. This will be the folder
+                        under your DATA_DIR
   --overwrite_cache     Overwrite the cached training and evaluation sets
   --max_seq_length MAX_SEQ_LENGTH
                         The maximum total input sequence length after
