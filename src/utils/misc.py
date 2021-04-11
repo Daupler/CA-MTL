@@ -24,18 +24,19 @@ class MultiTaskDataArguments:
     """
 
     data_dir: str = field(
+        required=True,
         metadata={
             "help": "The input data dir. Should contain the .tsv files (or other data files) for the task."
         }
     )
     tasks: List[str] = field(
-        default=None,
+        default=None, required=True,
         metadata={
             "help": "The task file that contains the tasks to train on. Must be provided"
         },
     )
     task_data_folder: List[str] = field(
-        default=None,
+        default=None, required=True,
         metadata={
             "help": "The task folders that contain the data for the tasks to train on. Must be provided"
         },
@@ -45,22 +46,10 @@ class MultiTaskDataArguments:
         metadata={"help": "Overwrite the cached training and evaluation sets"},
     )
     max_seq_length: int = field(
-        default=128,
+        default=256,
         metadata={
             "help": "The maximum total input sequence length after tokenization. Sequences longer "
             "than this will be truncated, sequences shorter will be padded."
         },
     )
 
-    def __post_init__(self):
-        if self.tasks is None:
-            self.tasks = [
-                "cola",
-                "mnli",
-                "rte",
-                "wnli",
-                "qqp",
-                "sts-b",
-                "sst-2",
-                "qnli",
-            ]
