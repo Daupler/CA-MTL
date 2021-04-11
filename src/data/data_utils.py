@@ -9,9 +9,8 @@ import torch
 from transformers import (
     InputExample,
     PreTrainedTokenizer,
-    glue_compute_metrics,
 )
-from task_data_processors import (
+from .task_data_processors import (
     task_processors,
     task_output_modes
 )
@@ -149,10 +148,10 @@ def matthews_acc_and_f1(preds, labels):
     f1_micro = f1_score(y_true=labels, y_pred=preds, average = "micro")
     f1_weighted = f1_score(y_true=labels, y_pred=preds, average = "weighted")
     return {
-        "matthews_corrcoef": matthews
+        "matthews_corrcoef": matthews,
         "acc": acc,
         "f1_micro": f1_micro,
-        "f1_weighted": f1_weighted
+        "f1_weighted": f1_weighted,
         "acc_and_f1_weighted": (acc + f1_weighted) / 2,
     }
 
