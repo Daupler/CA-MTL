@@ -162,3 +162,9 @@ task_output_modes = {
     "D1": "classification",
     "Sentiment": "classification",
 }
+
+tasks_num_labels = {
+    "D0": 17,
+    "D1": 114,
+    "Sentiment": 0,
+}
