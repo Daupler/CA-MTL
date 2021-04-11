@@ -7,6 +7,7 @@ from transformers import InputFeatures
 
 class Split(Enum):
     train = "train"
+    train_dev = "train_dev"
     dev = "dev"
     test = "test"
 
@@ -30,7 +31,13 @@ class MultiTaskDataArguments:
     tasks: List[str] = field(
         default=None,
         metadata={
-            "help": "The task file that contains the tasks to train on. If None all tasks will be used"
+            "help": "The task file that contains the tasks to train on. Must be provided"
+        },
+    )
+    task_data_folder: List[str] = field(
+        default=None,
+        metadata={
+            "help": "The task folders that contain the data for the tasks to train on. Must be provided"
         },
     )
     overwrite_cache: bool = field(
