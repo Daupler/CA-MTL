@@ -142,6 +142,6 @@ class CaMtl(BertPreTrainedModel):
         elif model_name_or_path == "CA-MTL-base":
             return "bert-base-cased"
         elif model_name_or_path == "CA-MTL-tiny":
-            return 'huawei-noah/TinyBERT_General_6L_768D'
+            return 'huawei-noah/TinyBERT_General_6L_768D' # Not current working, need to update conf
         else:
             return model_name_or_path
