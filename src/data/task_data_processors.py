@@ -41,7 +41,7 @@ class D0Processor(DataProcessor):
         """See base class."""
         return self._create_examples(self._read_tsv(os.path.join(data_dir, "test.tsv")), "test")
 
-    def get_labels(self):
+    def get_labels(self, data_dir):
         """See base class."""
         metadata = json.load(open(os.path.join(data_dir, "metadata.json"), 'r'))
         return metadata['labels']
@@ -87,7 +87,7 @@ class D1Processor(DataProcessor):
         """See base class."""
         return self._create_examples(self._read_tsv(os.path.join(data_dir, "test.tsv")), "test")
 
-    def get_labels(self):
+    def get_labels(self, data_dir):
         """See base class."""
         metadata = json.load(open(os.path.join(data_dir, "metadata.json"), 'r'))
         return metadata['labels']
@@ -104,6 +104,7 @@ class D1Processor(DataProcessor):
             label = None if set_type == "test" else line[1]
             examples.append(InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
         return examples
+    
 class SentimentProcessor(DataProcessor):
     """Processor for the Sentiment data set."""
     
@@ -132,7 +133,7 @@ class SentimentProcessor(DataProcessor):
         """See base class."""
         return self._create_examples(self._read_tsv(os.path.join(data_dir, "test.tsv")), "test")
 
-    def get_labels(self):
+    def get_labels(self, data_dir):
         """See base class."""
         metadata = json.load(open(os.path.join(data_dir, "metadata.json"), 'r'))
         return metadata['labels']
