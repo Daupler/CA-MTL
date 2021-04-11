@@ -18,12 +18,13 @@ from src.utils.misc import MultiTaskInputFeatures, Split
 from sklearn.metrics import matthews_corrcoef, f1_score
 
 logger = logging.getLogger(__name__)
-
+ 
 def convert_examples_to_multi_task_features(
     examples: List[InputExample],
     tokenizer: PreTrainedTokenizer,
     task_name,
     task_id,
+    task_data_dir,
     max_length: Optional[int] = None,
     label_list=None,
     output_mode=None,
@@ -33,7 +34,7 @@ def convert_examples_to_multi_task_features(
 
     processor = task_processors[task_name]()
     if label_list is None:
-        label_list = processor.get_labels()
+        label_list = processor.get_labels(task_data_dir)
         logger.info("Using label list %s for task %s" % (label_list, task_name))
     if output_mode is None:
         output_mode = task_output_modes[task_name]
@@ -92,7 +93,7 @@ def load_task_features(task_name, task_id, args, tokenizer, mode, limit_length):
         ),
     )
     
-    label_list = processor.get_labels()
+    label_list = processor.get_labels(task_data_dir)
 
     # Make sure only the first process in distributed training processes the dataset,
     # and the others will use the cache.
@@ -125,6 +126,7 @@ def load_task_features(task_name, task_id, args, tokenizer, mode, limit_length):
                 tokenizer,
                 task_name,
                 task_id,
+                task_data_dir,
                 max_length=args.max_seq_length,
                 label_list=label_list,
                 output_mode=task_output_modes[task_name],
