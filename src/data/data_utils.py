@@ -16,6 +16,7 @@ from task_data_processors import (
     task_output_modes
 )
 from src.utils.misc import MultiTaskInputFeatures, Split
+from sklearn.metrics import matthews_corrcoef, f1_score
 
 logger = logging.getLogger(__name__)
 
@@ -139,12 +140,38 @@ def load_task_features(task_name, task_id, args, tokenizer, mode, limit_length):
 
     return features, label_list
 
+def simple_accuracy(labels, preds):
+    return (preds == labels).mean()
 
-# def compute_glue_metrics(task_name, p):
-#     output_mode = glue_output_modes[task_name]
+def matthews_acc_and_f1(preds, labels):
+    acc = simple_accuracy(labels, preds)
+    matthews = matthews_corrcoef(labels, preds)
+    f1_micro = f1_score(y_true=labels, y_pred=preds, average = "micro")
+    f1_weighted = f1_score(y_true=labels, y_pred=preds, average = "weighted")
+    return {
+        "matthews_corrcoef": matthews
+        "acc": acc,
+        "f1_micro": f1_micro,
+        "f1_weighted": f1_weighted
+        "acc_and_f1_weighted": (acc + f1_weighted) / 2,
+    }
 
-#     if output_mode == "classification":
-#         preds = np.argmax(p.predictions, axis=1)
-#     elif output_mode == "regression":
-#         preds = np.squeeze(p.predictions)
-#     return glue_compute_metrics(task_name, preds, p.label_ids)
+def task_compute_metrics(task_name, preds, labels):
+    assert len(preds) == len(labels)
+    if task_name == "D0":
+        return matthews_acc_and_f1(preds, labels)
+    elif task_name == "D1":
+        return matthews_acc_and_f1(preds, labels)
+    elif task_name == "Sentiment":
+        return matthews_acc_and_f1(preds, labels)
+    else:
+        raise KeyError(task_name)
+            
+def compute_task_metrics(task_name, p):
+    output_mode = task_output_modes[task_name]
+
+    if output_mode == "classification":
+        preds = np.argmax(p.predictions, axis=1)
+    elif output_mode == "regression":
+        preds = np.squeeze(p.predictions)
+    return task_compute_metrics(task_name, preds, p.label_ids)
