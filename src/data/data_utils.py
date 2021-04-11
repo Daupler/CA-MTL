@@ -82,7 +82,7 @@ def load_task_features(task_name, task_id, args, tokenizer, mode, limit_length):
     processor = task_processors[task_name]()
 
     # Load data features from cache or dataset file
-    task_data_dir = os.path.join(args.data_dir, args.task_data_folder[task_id])
+    task_data_dir = os.path.join(args.data_dir, args.task_data_folders[task_id])
     cached_features_file = os.path.join(
         task_data_dir,
         "cached_{}_{}_{}_{}".format(

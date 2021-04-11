@@ -35,7 +35,7 @@ class MultiTaskDataArguments:
             "help": "The task file that contains the tasks to train on. Must be provided"
         },
     )
-    task_data_folder: List[str] = field(
+    task_data_folders: List[str] = field(
         default=None, required=True,
         metadata={
             "help": "The task folders that contain the data for the tasks to train on. Must be provided"
