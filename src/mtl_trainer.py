@@ -9,7 +9,13 @@ from torch.utils.data.dataloader import DataLoader
 from torch.utils.data.dataset import Dataset
 from torch.utils.data.distributed import DistributedSampler
 from torch.utils.data.sampler import RandomSampler
-from transformers import Trainer, TrainingArguments, EvalPrediction
+from transformers import (
+    Trainer, 
+    TrainingArguments, 
+    EvalPrediction, 
+    DataCollator,
+    DefaultDataCollator
+)
 
 from src.data.task_data_processors import task_output_modes
 
@@ -41,6 +47,7 @@ class MultiTaskTrainer(Trainer):
         self.data_args = data_args
         self.eval_datasets = eval_datasets
         self.test_datasets = test_datasets
+        self.data_collator = DefaultDataCollator()
 
     def get_train_dataloader(self) -> DataLoader:
         if self.args.use_mt_uncertainty:
