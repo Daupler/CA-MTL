@@ -132,6 +132,8 @@ class CaMtl(BertPreTrainedModel):
             return CaMtlLargeEncoder(self.config, data_args=self.data_args)
         elif model_name_or_path == "CA-MTL-base":
             return CaMtlBaseEncoder(self.config, data_args=self.data_args)
+        elif model_name_or_path == "CA-MTL-tiny":
+            return CaMtlBaseEncoder(self.config, data_args=self.data_args)
         else:
             return _BertEncoder(self.config)
 
