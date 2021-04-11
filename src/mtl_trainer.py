@@ -9,9 +9,11 @@ from torch.utils.data.dataloader import DataLoader
 from torch.utils.data.dataset import Dataset
 from torch.utils.data.distributed import DistributedSampler
 from torch.utils.data.sampler import RandomSampler
-from transformers import Trainer, TrainingArguments, EvalPrediction, glue_output_modes
+from transformers import Trainer, TrainingArguments, EvalPrediction
 
-from src.data.glue_utils import compute_glue_metrics
+from src.data.task_data_processors import task_output_modes
+
+from src.data.data_utils import compute_task_metrics
 
 logger = logging.getLogger(__name__)
 
@@ -224,7 +226,7 @@ class MultiTaskTrainer(Trainer):
         for task_name, test_dataset in datasets.items():
             logger.info(task_name)
             predictions = super().predict(test_dataset=test_dataset).predictions
-            output_mode = glue_output_modes[task_name] 
+            output_mode = task_output_modes[task_name] 
             if output_mode == "classification":
                 predictions = np.argmax(predictions, axis=1)
 
@@ -249,6 +251,6 @@ class MultiTaskTrainer(Trainer):
         eval_dataset
     ) -> Callable[[EvalPrediction], Dict]:
         def compute_metrics_fn(p: EvalPrediction):
-            return compute_glue_metrics(eval_dataset.task_name, p)
+            return compute_task_metrics(eval_dataset.task_name, p)
 
         return compute_metrics_fn
