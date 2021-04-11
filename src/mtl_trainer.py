@@ -47,7 +47,7 @@ class MultiTaskTrainer(Trainer):
         self.data_args = data_args
         self.eval_datasets = eval_datasets
         self.test_datasets = test_datasets
-        self.data_collator = DefaultDataCollator()
+#         self.data_collator = DefaultDataCollator()
 
     def get_train_dataloader(self) -> DataLoader:
         if self.args.use_mt_uncertainty:
@@ -109,21 +109,6 @@ class MultiTaskTrainer(Trainer):
                     test_batch_entropy_mean / max_mean_batch_entropy
                 )
                 test_batch_entropy = test_batch_entropy * test_batch_entropy_mean
-
-                if "sts-b" in tasks and "mrpc" in tasks:
-                    # Since sts_b is a regression task, the entropy value is always 0
-                    stsb_idx = test_batch["task_id"] == tasks.index("sts-b")
-                    mrpc_idx = test_batch["task_id"] == tasks.index("sst-2")
-                    num_items = min(
-                        len(test_batch_entropy[stsb_idx]),
-                        len(test_batch_entropy[mrpc_idx]),
-                    )
-                    stsb_idx = stsb_idx.nonzero()[:num_items]
-                    mrpc_idx = mrpc_idx.nonzero()[:num_items]
-                    test_batch_entropy[stsb_idx] = test_batch_entropy[mrpc_idx]
-                    test_batch_entropy_mean[stsb_idx] = test_batch_entropy_mean[
-                        mrpc_idx
-                    ]
 
                 select_size = min(
                     self.my_loader.args.train_batch_size,
