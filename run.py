@@ -112,10 +112,10 @@ def main():
         train_dataset=MultiTaskDataset(data_args, tokenizer, limit_length=None)
         if training_args.do_train
         else None,
-        eval_datasets=create_eval_datasets(Split.dev, data_args, tokenizer)
+        eval_datasets=create_eval_datasets(Split.train_dev, data_args, tokenizer)
         if training_args.do_eval or training_args.evaluate_during_training
         else None,
-        test_datasets=create_eval_datasets(Split.test, data_args, tokenizer)
+        test_datasets=create_eval_datasets(Split.dev, data_args, tokenizer)
         if training_args.do_predict
         else None,
     )
