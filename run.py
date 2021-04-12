@@ -8,9 +8,11 @@ import torch
 from transformers import (
     HfArgumentParser,
     set_seed,
-    AutoTokenizer,
-    AutoConfig,
+#     AutoTokenizer,
+#     AutoConfig,
     EvalPrediction,
+    BertConfig, 
+    BertTokenizer
 )
 
 from src.model.ca_mtl import CaMtl, CaMtlArguments
@@ -62,7 +64,6 @@ def parse_cmd_args():
 
     return model_args, data_args, training_args
 
-
 def create_eval_datasets(mode, data_args, tokenizer):
     eval_datasets = {}
     for task_id, task_name in enumerate(data_args.tasks):
@@ -85,7 +86,7 @@ def main():
 
     set_seed(training_args.seed)
 
-    config = AutoConfig.from_pretrained(
+    config = BertConfig.from_pretrained(
         CaMtl.get_base_model(model_args.model_name_or_path),
     )
 
@@ -97,7 +98,7 @@ def main():
 
     logger.info(model)
 
-    tokenizer = AutoTokenizer.from_pretrained(
+    tokenizer = BertTokenizer.from_pretrained(
         CaMtl.get_base_model(model_args.model_name_or_path),
     )
 
