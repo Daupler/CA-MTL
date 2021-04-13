@@ -21,7 +21,7 @@ class TaskDataset(Dataset):
         limit_length: Optional[int] = None,
         mode: Union[str, Split] = Split.train,
     ):
-        self.task_name = task_name
+        self.task_name = str(task_name)
         self.mode = mode
         self.features, self.labels = load_task_features(
             task_name, task_id, args, tokenizer, mode, limit_length
