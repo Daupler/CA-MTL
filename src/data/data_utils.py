@@ -141,20 +141,14 @@ def load_task_features(task_name, task_id, args, tokenizer, mode, limit_length):
 
     return features, label_list
 
-def simple_accuracy(labels, preds):
-    return (preds == labels).mean()
-
 def matthews_acc_and_f1(preds, labels):
-    acc = simple_accuracy(labels, preds)
     matthews = matthews_corrcoef(labels, preds)
     f1_micro = f1_score(y_true=labels, y_pred=preds, average = "micro")
     f1_weighted = f1_score(y_true=labels, y_pred=preds, average = "weighted")
     return {
         "matthews_corrcoef": matthews,
-        "acc": acc,
         "f1_micro": f1_micro,
         "f1_weighted": f1_weighted,
-        "acc_and_f1_weighted": (acc + f1_weighted) / 2,
     }
 
 def task_compute_metrics(task_name, preds, labels):
