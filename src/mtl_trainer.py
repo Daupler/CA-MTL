@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from typing import Dict, Optional, Callable
 
 import torch
+import wandb
 import numpy as np
 from tqdm.auto import tqdm
 from torch.utils.data.dataloader import DataLoader
@@ -250,7 +251,7 @@ class MultiTaskTrainer(Trainer):
             if output_mode == "classification":
                 predictions = np.argmax(predictions, axis=1)
 
-            run_name = os.getenv("WANDB_NAME")
+            run_name = wandb.run.name
             output_test_file = os.path.join(
                 self.args.output_dir,
                 f"{task_name}_test_iter_{run_name}.tsv",
