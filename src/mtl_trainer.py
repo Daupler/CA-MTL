@@ -213,7 +213,7 @@ class MultiTaskTrainer(Trainer):
             
             eval_result = self._prediction_loop(
                 eval_dataloader, description="Evaluation", task_name=task_name, 
-                mode=test_dataset.mode)
+                mode=eval_dataset.mode)
             
             self._log(eval_result.metrics)
 
