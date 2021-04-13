@@ -242,7 +242,7 @@ class MultiTaskTrainer(Trainer):
                 mode=test_dataset.mode)
             
             self._log(test_result.metrics)
-            for key, value in eval_result.items():
+            for key, value in test_result.metrics.items():
                 logger.info("  %s = %s", key, value)
                 
             predictions = test_result.predictions
