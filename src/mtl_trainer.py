@@ -5,6 +5,7 @@ from typing import Dict, Optional, Callable
 
 import torch
 import numpy as np
+from tqdm.auto import tqdm
 from torch.utils.data.dataloader import DataLoader
 from torch.utils.data.dataset import Dataset
 from torch.utils.data.distributed import DistributedSampler
