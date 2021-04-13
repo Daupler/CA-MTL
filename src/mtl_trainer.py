@@ -14,9 +14,10 @@ from transformers import (
     TrainingArguments, 
     EvalPrediction, 
     DataCollator,
-    DefaultDataCollator
+    DefaultDataCollator,
 )
 from transformers.trainer_utils import PredictionOutput
+from transformers.training_args import is_tpu_available
 
 from src.data.task_data_processors import task_output_modes
 
