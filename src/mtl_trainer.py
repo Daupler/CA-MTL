@@ -218,7 +218,7 @@ class MultiTaskTrainer(Trainer):
             
             self._log(eval_result.metrics)
 
-            for key, value in eval_result.items():
+            for key, value in eval_result.metrics.items():
                 logger.info("  %s = %s", key, value)
 
         if self.args.tpu_metrics_debug:
