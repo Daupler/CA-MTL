@@ -249,13 +249,15 @@ class MultiTaskTrainer(Trainer):
             if output_mode == "classification":
                 predictions = np.argmax(predictions, axis=1)
 
+            run_name = os.getenv("WANDB_NAME")
             output_test_file = os.path.join(
                 self.args.output_dir,
-                f"{task_name}_test_iter_{self.global_step}.tsv",
+                f"{task_name}_test_iter_{run_name}.tsv",
             )
             if self.is_world_master():
                 with open(output_test_file, "w") as writer:
                     logger.info("***** Test results {} *****".format(task_name))
+                    logger.info("***** Writing as {} *****".format(run_name))
                     writer.write("index\tprediction\n")
                     for index, item in enumerate(predictions):
                         if output_mode == "regression":
@@ -264,6 +266,7 @@ class MultiTaskTrainer(Trainer):
                             writer.write(
                                 "%d\t%s\n" % (index, test_dataset.get_labels()[item])
                             )
+                            
     def _prediction_loop(
         self, dataloader: DataLoader, description: str, task_name: str, mode: str,
         prediction_loss_only: Optional[bool] = None, 
