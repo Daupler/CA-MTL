@@ -70,11 +70,6 @@ def create_eval_datasets(mode, data_args, tokenizer):
         eval_datasets[task_name] = TaskDataset(
             task_name, task_id, data_args, tokenizer, mode=mode
         )
-        if task_name == "mnli":
-            # Loop to handle MNLI double evaluation (matched, mis-matched)
-            eval_datasets["mnli-mm"] = TaskDataset(
-                "mnli-mm", task_id, data_args, tokenizer, mode=mode
-            )
 
     return eval_datasets
 
