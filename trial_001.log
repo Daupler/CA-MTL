@@ -1,349 +1,0 @@
-04/12/2021 06:26:54 - INFO - transformers.training_args -   PyTorch: setting up devices
-04/12/2021 06:26:54 - WARNING - __main__ -   Process rank: -1, device: cuda, n_gpu: 1, distributed training: False, 16-bits training: False
-04/12/2021 06:26:54 - INFO - transformers.configuration_utils -   loading configuration file https://s3.amazonaws.com/models.huggingface.co/bert/huawei-noah/TinyBERT_General_6L_768D/config.json from cache at /home/datasci/.cache/torch/transformers/a2effe717003a3a536ff7bebc6107c97073ca65e9878930cb8b130651bb43b0f.1173f0740b7f056b864067e238c1c50ae7bb3344d34377e77818b5d00e944279
-04/12/2021 06:26:54 - INFO - transformers.configuration_utils -   Model config BertConfig {
-  "attention_probs_dropout_prob": 0.1,
-  "cell": {},
-  "hidden_act": "gelu",
-  "hidden_dropout_prob": 0.1,
-  "hidden_size": 768,
-  "initializer_range": 0.02,
-  "intermediate_size": 3072,
-  "layer_norm_eps": 1e-12,
-  "max_position_embeddings": 512,
-  "model_type": "bert",
-  "num_attention_heads": 12,
-  "num_hidden_layers": 6,
-  "pad_token_id": 0,
-  "pre_trained": "",
-  "structure": [],
-  "type_vocab_size": 2,
-  "vocab_size": 30522
-}
-
-04/12/2021 06:26:55 - INFO - transformers.modeling_utils -   loading weights file https://cdn.huggingface.co/huawei-noah/TinyBERT_General_6L_768D/pytorch_model.bin from cache at /home/datasci/.cache/torch/transformers/84451f9577b29a4f236f28261fd2603640828cb26a7fed13f70d043ddbca41d5.9d208358bccc05e7a1e0957ce9f4ad622ec4eeeadc384905fd19b6763c9cec2f
-04/12/2021 06:26:56 - INFO - transformers.modeling_utils -   Weights of CaMtl not initialized from pretrained model: ['bert.task_type_embeddings.weight', 'bert.conditional_alignment.gb_weights.weight', 'bert.conditional_alignment.gb_weights.bias', 'bert.encoder.task_transformation.weight', 'bert.encoder.task_transformation.bias', 'bert.encoder.layer.0.attention.self.random_weight_matrix', 'bert.encoder.layer.0.attention.self.cond_block_diag_attn.gb_weights.weight', 'bert.encoder.layer.0.attention.self.cond_block_diag_attn.gb_weights.bias', 'bert.encoder.layer.1.attention.self.random_weight_matrix', 'bert.encoder.layer.1.attention.self.cond_block_diag_attn.gb_weights.weight', 'bert.encoder.layer.1.attention.self.cond_block_diag_attn.gb_weights.bias', 'bert.encoder.layer.2.attention.self.random_weight_matrix', 'bert.encoder.layer.2.attention.self.cond_block_diag_attn.gb_weights.weight', 'bert.encoder.layer.2.attention.self.cond_block_diag_attn.gb_weights.bias', 'bert.encoder.layer.3.attention.self.random_weight_matrix', 'bert.encoder.layer.3.attention.self.cond_block_diag_attn.gb_weights.weight', 'bert.encoder.layer.3.attention.self.cond_block_diag_attn.gb_weights.bias', 'bert.encoder.layer.3.attention.output.LayerNorm.ln_weight_modulation.gb_weights.weight', 'bert.encoder.layer.3.attention.output.LayerNorm.ln_weight_modulation.gb_weights.bias', 'bert.encoder.layer.3.output.LayerNorm.ln_weight_modulation.gb_weights.weight', 'bert.encoder.layer.3.output.LayerNorm.ln_weight_modulation.gb_weights.bias', 'bert.encoder.layer.4.attention.self.random_weight_matrix', 'bert.encoder.layer.4.attention.self.cond_block_diag_attn.gb_weights.weight', 'bert.encoder.layer.4.attention.self.cond_block_diag_attn.gb_weights.bias', 'bert.encoder.layer.4.attention.output.LayerNorm.ln_weight_modulation.gb_weights.weight', 'bert.encoder.layer.4.attention.output.LayerNorm.ln_weight_modulation.gb_weights.bias', 'bert.encoder.layer.4.output.LayerNorm.ln_weight_modulation.gb_weights.weight', 'bert.encoder.layer.4.output.LayerNorm.ln_weight_modulation.gb_weights.bias', 'bert.encoder.layer.5.new_attention.self.random_weight_matrix', 'bert.encoder.layer.5.new_attention.self.query.weight', 'bert.encoder.layer.5.new_attention.self.query.bias', 'bert.encoder.layer.5.new_attention.self.key.weight', 'bert.encoder.layer.5.new_attention.self.key.bias', 'bert.encoder.layer.5.new_attention.self.value.weight', 'bert.encoder.layer.5.new_attention.self.value.bias', 'bert.encoder.layer.5.new_attention.self.cond_block_diag_attn.gb_weights.weight', 'bert.encoder.layer.5.new_attention.self.cond_block_diag_attn.gb_weights.bias', 'bert.encoder.layer.5.new_attention.output.dense.weight', 'bert.encoder.layer.5.new_attention.output.dense.bias', 'bert.encoder.layer.5.new_attention.output.LayerNorm.weight', 'bert.encoder.layer.5.new_attention.output.LayerNorm.bias', 'bert.encoder.layer.5.new_attention.output.LayerNorm.ln_weight_modulation.gb_weights.weight', 'bert.encoder.layer.5.new_attention.output.LayerNorm.ln_weight_modulation.gb_weights.bias', 'bert.encoder.layer.5.new_intermediate.dense.weight', 'bert.encoder.layer.5.new_intermediate.dense.bias', 'bert.encoder.layer.5.new_output.dense.weight', 'bert.encoder.layer.5.new_output.dense.bias', 'bert.encoder.layer.5.new_output.LayerNorm.weight', 'bert.encoder.layer.5.new_output.LayerNorm.bias', 'bert.encoder.layer.5.new_output.LayerNorm.ln_weight_modulation.gb_weights.weight', 'bert.encoder.layer.5.new_output.LayerNorm.ln_weight_modulation.gb_weights.bias', 'bert.encoder.layer.5.adapter.bottleneck.emb_transf.weight', 'bert.encoder.layer.5.adapter.bottleneck.emb_transf.bias', 'bert.encoder.layer.5.adapter.bottleneck.hidden_modulation.gb_weights.weight', 'bert.encoder.layer.5.adapter.bottleneck.hidden_modulation.gb_weights.bias', 'bert.encoder.layer.5.adapter.bottleneck.down_proj_layer.weight', 'bert.encoder.layer.5.adapter.bottleneck.down_proj_layer.bias', 'bert.encoder.layer.5.adapter.bottleneck.up_proj_layer.weight', 'bert.encoder.layer.5.adapter.bottleneck.up_proj_layer.bias', 'bert.encoder.layer.5.adapter.condlayernorm.weight', 'bert.encoder.layer.5.adapter.condlayernorm.bias', 'bert.encoder.layer.5.adapter.condlayernorm.ln_weight_modulation.gb_weights.weight', 'bert.encoder.layer.5.adapter.condlayernorm.ln_weight_modulation.gb_weights.bias', 'decoders.0.model.weight', 'decoders.0.model.bias', 'decoders.1.model.weight', 'decoders.1.model.bias']
-04/12/2021 06:26:56 - INFO - transformers.modeling_utils -   Weights from pretrained model not used in CaMtl: ['cls.predictions.bias', 'cls.predictions.transform.dense.weight', 'cls.predictions.transform.dense.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.transform.LayerNorm.bias', 'cls.predictions.decoder.weight', 'cls.seq_relationship.weight', 'cls.seq_relationship.bias', 'fit_denses.0.weight', 'fit_denses.0.bias', 'fit_denses.1.weight', 'fit_denses.1.bias', 'fit_denses.2.weight', 'fit_denses.2.bias', 'fit_denses.3.weight', 'fit_denses.3.bias', 'fit_denses.4.weight', 'fit_denses.4.bias', 'fit_denses.5.weight', 'fit_denses.5.bias', 'fit_denses.6.weight', 'fit_denses.6.bias', 'bert.encoder.layer.5.attention.self.query.weight', 'bert.encoder.layer.5.attention.self.query.bias', 'bert.encoder.layer.5.attention.self.key.weight', 'bert.encoder.layer.5.attention.self.key.bias', 'bert.encoder.layer.5.attention.self.value.weight', 'bert.encoder.layer.5.attention.self.value.bias', 'bert.encoder.layer.5.attention.output.dense.weight', 'bert.encoder.layer.5.attention.output.dense.bias', 'bert.encoder.layer.5.attention.output.LayerNorm.weight', 'bert.encoder.layer.5.attention.output.LayerNorm.bias', 'bert.encoder.layer.5.intermediate.dense.weight', 'bert.encoder.layer.5.intermediate.dense.bias', 'bert.encoder.layer.5.output.dense.weight', 'bert.encoder.layer.5.output.dense.bias', 'bert.encoder.layer.5.output.LayerNorm.weight', 'bert.encoder.layer.5.output.LayerNorm.bias']
-04/12/2021 06:26:56 - INFO - __main__ -   CaMtl(
-  (bert): CaMtlBaseEncoder(
-    (task_type_embeddings): Embedding(2, 768)
-    (conditional_alignment): FiLM(
-      (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-    )
-    (embeddings): BertEmbeddings(
-      (word_embeddings): Embedding(30522, 768, padding_idx=0)
-      (position_embeddings): Embedding(512, 768)
-      (token_type_embeddings): Embedding(2, 768)
-      (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
-      (dropout): Dropout(p=0.1, inplace=False)
-    )
-    (encoder): MyBertEncoder9(
-      (task_transformation): Linear(in_features=768, out_features=768, bias=True)
-      (layer): ModuleList(
-        (0): BertLayer9(
-          (attention): MyBertAttention9(
-            (self): MyBertSelfAttention9(
-              (query): Linear(in_features=768, out_features=768, bias=True)
-              (key): Linear(in_features=768, out_features=768, bias=True)
-              (value): Linear(in_features=768, out_features=768, bias=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-              (cond_block_diag_attn): CBDA(
-                (gb_weights): Linear(in_features=768, out_features=172, bias=True)
-              )
-            )
-            (output): BertSelfOutput(
-              (dense): Linear(in_features=768, out_features=768, bias=True)
-              (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-            )
-          )
-          (intermediate): BertIntermediate(
-            (dense): Linear(in_features=768, out_features=3072, bias=True)
-          )
-          (output): BertOutput(
-            (dense): Linear(in_features=3072, out_features=768, bias=True)
-            (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
-            (dropout): Dropout(p=0.1, inplace=False)
-          )
-        )
-        (1): BertLayer9(
-          (attention): MyBertAttention9(
-            (self): MyBertSelfAttention9(
-              (query): Linear(in_features=768, out_features=768, bias=True)
-              (key): Linear(in_features=768, out_features=768, bias=True)
-              (value): Linear(in_features=768, out_features=768, bias=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-              (cond_block_diag_attn): CBDA(
-                (gb_weights): Linear(in_features=768, out_features=172, bias=True)
-              )
-            )
-            (output): BertSelfOutput(
-              (dense): Linear(in_features=768, out_features=768, bias=True)
-              (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-            )
-          )
-          (intermediate): BertIntermediate(
-            (dense): Linear(in_features=768, out_features=3072, bias=True)
-          )
-          (output): BertOutput(
-            (dense): Linear(in_features=3072, out_features=768, bias=True)
-            (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
-            (dropout): Dropout(p=0.1, inplace=False)
-          )
-        )
-        (2): BertLayer9(
-          (attention): MyBertAttention9(
-            (self): MyBertSelfAttention9(
-              (query): Linear(in_features=768, out_features=768, bias=True)
-              (key): Linear(in_features=768, out_features=768, bias=True)
-              (value): Linear(in_features=768, out_features=768, bias=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-              (cond_block_diag_attn): CBDA(
-                (gb_weights): Linear(in_features=768, out_features=172, bias=True)
-              )
-            )
-            (output): BertSelfOutput(
-              (dense): Linear(in_features=768, out_features=768, bias=True)
-              (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-            )
-          )
-          (intermediate): BertIntermediate(
-            (dense): Linear(in_features=768, out_features=3072, bias=True)
-          )
-          (output): BertOutput(
-            (dense): Linear(in_features=3072, out_features=768, bias=True)
-            (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
-            (dropout): Dropout(p=0.1, inplace=False)
-          )
-        )
-        (3): MyBertLayer9(
-          (attention): MyBertAttention9(
-            (self): MyBertSelfAttention9(
-              (query): Linear(in_features=768, out_features=768, bias=True)
-              (key): Linear(in_features=768, out_features=768, bias=True)
-              (value): Linear(in_features=768, out_features=768, bias=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-              (cond_block_diag_attn): CBDA(
-                (gb_weights): Linear(in_features=768, out_features=172, bias=True)
-              )
-            )
-            (output): MyBertSelfOutput9(
-              (dense): Linear(in_features=768, out_features=768, bias=True)
-              (LayerNorm): ConditionalLayerNorm(
-                (768,), 768, eps=1e-12
-                (ln_weight_modulation): FiLM(
-                  (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-                )
-              )
-              (dropout): Dropout(p=0.1, inplace=False)
-            )
-          )
-          (intermediate): BertIntermediate(
-            (dense): Linear(in_features=768, out_features=3072, bias=True)
-          )
-          (output): MyBertOutput9(
-            (dense): Linear(in_features=3072, out_features=768, bias=True)
-            (LayerNorm): ConditionalLayerNorm(
-              (768,), 768, eps=1e-12
-              (ln_weight_modulation): FiLM(
-                (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-              )
-            )
-            (dropout): Dropout(p=0.1, inplace=False)
-          )
-        )
-        (4): MyBertLayer9(
-          (attention): MyBertAttention9(
-            (self): MyBertSelfAttention9(
-              (query): Linear(in_features=768, out_features=768, bias=True)
-              (key): Linear(in_features=768, out_features=768, bias=True)
-              (value): Linear(in_features=768, out_features=768, bias=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-              (cond_block_diag_attn): CBDA(
-                (gb_weights): Linear(in_features=768, out_features=172, bias=True)
-              )
-            )
-            (output): MyBertSelfOutput9(
-              (dense): Linear(in_features=768, out_features=768, bias=True)
-              (LayerNorm): ConditionalLayerNorm(
-                (768,), 768, eps=1e-12
-                (ln_weight_modulation): FiLM(
-                  (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-                )
-              )
-              (dropout): Dropout(p=0.1, inplace=False)
-            )
-          )
-          (intermediate): BertIntermediate(
-            (dense): Linear(in_features=768, out_features=3072, bias=True)
-          )
-          (output): MyBertOutput9(
-            (dense): Linear(in_features=3072, out_features=768, bias=True)
-            (LayerNorm): ConditionalLayerNorm(
-              (768,), 768, eps=1e-12
-              (ln_weight_modulation): FiLM(
-                (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-              )
-            )
-            (dropout): Dropout(p=0.1, inplace=False)
-          )
-        )
-        (5): MyBertAdapterLayer9(
-          (new_attention): MyBertAttention9(
-            (self): MyBertSelfAttention9(
-              (query): Linear(in_features=768, out_features=768, bias=True)
-              (key): Linear(in_features=768, out_features=768, bias=True)
-              (value): Linear(in_features=768, out_features=768, bias=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-              (cond_block_diag_attn): CBDA(
-                (gb_weights): Linear(in_features=768, out_features=172, bias=True)
-              )
-            )
-            (output): MyBertSelfOutput9(
-              (dense): Linear(in_features=768, out_features=768, bias=True)
-              (LayerNorm): ConditionalLayerNorm(
-                (768,), 768, eps=1e-12
-                (ln_weight_modulation): FiLM(
-                  (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-                )
-              )
-              (dropout): Dropout(p=0.1, inplace=False)
-            )
-          )
-          (new_intermediate): BertIntermediate(
-            (dense): Linear(in_features=768, out_features=3072, bias=True)
-          )
-          (new_output): MyBertOutput9(
-            (dense): Linear(in_features=3072, out_features=768, bias=True)
-            (LayerNorm): ConditionalLayerNorm(
-              (768,), 768, eps=1e-12
-              (ln_weight_modulation): FiLM(
-                (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-              )
-            )
-            (dropout): Dropout(p=0.1, inplace=False)
-          )
-          (adapter): BertAdapter9(
-            (bottleneck): ConditionalBottleNeck(
-              (emb_transf): Linear(in_features=768, out_features=768, bias=True)
-              (hidden_modulation): FiLM(
-                (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-              )
-              (down_proj_layer): Linear(in_features=768, out_features=256, bias=True)
-              (up_proj_layer): Linear(in_features=256, out_features=768, bias=True)
-            )
-            (condlayernorm): ConditionalLayerNorm(
-              (768,), 768, eps=1e-12
-              (ln_weight_modulation): FiLM(
-                (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-              )
-            )
-          )
-        )
-      )
-    )
-    (pooler): BertPooler(
-      (dense): Linear(in_features=768, out_features=768, bias=True)
-      (activation): Tanh()
-    )
-  )
-  (decoders): ModuleList(
-    (0): Decoder(
-      (dropout): Dropout(p=0.1, inplace=False)
-      (model): Linear(in_features=768, out_features=17, bias=True)
-    )
-    (1): Decoder(
-      (dropout): Dropout(p=0.1, inplace=False)
-      (model): Linear(in_features=768, out_features=114, bias=True)
-    )
-  )
-)
-04/12/2021 06:26:56 - INFO - transformers.tokenization_utils -   Model name 'huawei-noah/TinyBERT_General_6L_768D' not found in model shortcut name list (bert-base-uncased, bert-large-uncased, bert-base-cased, bert-large-cased, bert-base-multilingual-uncased, bert-base-multilingual-cased, bert-base-chinese, bert-base-german-cased, bert-large-uncased-whole-word-masking, bert-large-cased-whole-word-masking, bert-large-uncased-whole-word-masking-finetuned-squad, bert-large-cased-whole-word-masking-finetuned-squad, bert-base-cased-finetuned-mrpc, bert-base-german-dbmdz-cased, bert-base-german-dbmdz-uncased, TurkuNLP/bert-base-finnish-cased-v1, TurkuNLP/bert-base-finnish-uncased-v1, wietsedv/bert-base-dutch-cased). Assuming 'huawei-noah/TinyBERT_General_6L_768D' is a path, a model identifier, or url to a directory containing tokenizer files.
-04/12/2021 06:26:58 - INFO - transformers.tokenization_utils -   loading file https://s3.amazonaws.com/models.huggingface.co/bert/huawei-noah/TinyBERT_General_6L_768D/vocab.txt from cache at /home/datasci/.cache/torch/transformers/f3df129df0d2a6b551ca9c604c897a2fffe0138d43f74685fa0fe4837e51f986.542ce4285a40d23a559526243235df47c5f75c197f04f37d1a0c124c32c9a084
-04/12/2021 06:26:58 - INFO - transformers.tokenization_utils -   loading file https://s3.amazonaws.com/models.huggingface.co/bert/huawei-noah/TinyBERT_General_6L_768D/added_tokens.json from cache at None
-04/12/2021 06:26:58 - INFO - transformers.tokenization_utils -   loading file https://s3.amazonaws.com/models.huggingface.co/bert/huawei-noah/TinyBERT_General_6L_768D/special_tokens_map.json from cache at None
-04/12/2021 06:26:58 - INFO - transformers.tokenization_utils -   loading file https://s3.amazonaws.com/models.huggingface.co/bert/huawei-noah/TinyBERT_General_6L_768D/tokenizer_config.json from cache at None
-04/12/2021 06:26:58 - INFO - __main__ -   Training tasks: D0, D1
-04/12/2021 06:26:58 - INFO - filelock -   Lock 140522405793680 acquired on /hub/CA-MTL/data/D0/2021_04_08/cached_train_BertTokenizer_256_D0.lock
-04/12/2021 06:26:58 - INFO - src.data.data_utils -   Loading features from cached file /hub/CA-MTL/data/D0/2021_04_08/cached_train_BertTokenizer_256_D0 [took 0.001 s]
-04/12/2021 06:26:58 - INFO - filelock -   Lock 140522405793680 released on /hub/CA-MTL/data/D0/2021_04_08/cached_train_BertTokenizer_256_D0.lock
-04/12/2021 06:26:58 - INFO - filelock -   Lock 140522405790160 acquired on /hub/CA-MTL/data/D1/2021_04_08/cached_train_BertTokenizer_256_D1.lock
-04/12/2021 06:26:58 - INFO - src.data.data_utils -   Loading features from cached file /hub/CA-MTL/data/D1/2021_04_08/cached_train_BertTokenizer_256_D1 [took 0.000 s]
-04/12/2021 06:26:58 - INFO - filelock -   Lock 140522405790160 released on /hub/CA-MTL/data/D1/2021_04_08/cached_train_BertTokenizer_256_D1.lock
-04/12/2021 06:26:58 - INFO - filelock -   Lock 140522405791248 acquired on /hub/CA-MTL/data/D0/2021_04_08/cached_dev_BertTokenizer_256_D0.lock
-04/12/2021 06:26:58 - INFO - src.data.data_utils -   Loading features from cached file /hub/CA-MTL/data/D0/2021_04_08/cached_dev_BertTokenizer_256_D0 [took 0.025 s]
-04/12/2021 06:26:58 - INFO - filelock -   Lock 140522405791248 released on /hub/CA-MTL/data/D0/2021_04_08/cached_dev_BertTokenizer_256_D0.lock
-04/12/2021 06:26:58 - INFO - filelock -   Lock 140522405791568 acquired on /hub/CA-MTL/data/D1/2021_04_08/cached_dev_BertTokenizer_256_D1.lock
-04/12/2021 06:26:58 - INFO - src.data.data_utils -   Loading features from cached file /hub/CA-MTL/data/D1/2021_04_08/cached_dev_BertTokenizer_256_D1 [took 0.025 s]
-04/12/2021 06:26:58 - INFO - filelock -   Lock 140522405791568 released on /hub/CA-MTL/data/D1/2021_04_08/cached_dev_BertTokenizer_256_D1.lock
-04/12/2021 06:27:00 - WARNING - transformers.trainer -   You are instantiating a Trainer but Tensorboard is not installed. You should consider installing it.
-04/12/2021 06:27:00 - INFO - transformers.trainer -   Automatic Weights & Biases logging enabled, to disable set os.environ["WANDB_DISABLED"] = "true"
-wandb: Currently logged in as: heatxg (use `wandb login --relogin` to force relogin)
-wandb: Tracking run with wandb version 0.10.25
-wandb: Syncing run amber-flower-6
-wandb: ⭐️ View project at https://wandb.ai/heatxg/huggingface
-wandb: 🚀 View run at https://wandb.ai/heatxg/huggingface/runs/2kwq0d8f
-wandb: Run data is saved locally in /home/datasci/CA-MTL/wandb/run-20210412_062700-2kwq0d8f
-wandb: Run `wandb offline` to turn off syncing.
-04/12/2021 06:27:01 - INFO - transformers.trainer -   ***** Running training *****
-04/12/2021 06:27:01 - INFO - transformers.trainer -     Num examples = 100
-04/12/2021 06:27:01 - INFO - transformers.trainer -     Num Epochs = 7
-04/12/2021 06:27:01 - INFO - transformers.trainer -     Instantaneous batch size per device = 32
-04/12/2021 06:27:01 - INFO - transformers.trainer -     Total train batch size (w. parallel, distributed & accumulation) = 32
-04/12/2021 06:27:01 - INFO - transformers.trainer -     Gradient Accumulation steps = 1
-04/12/2021 06:27:01 - INFO - transformers.trainer -     Total optimization steps = 28
-Epoch:   0%|                                              | 0/7 [00:00<?, ?it/s]
-Iteration:   0%|                                          | 0/4 [00:00<?, ?it/s][A
-Iteration:  25%|████████▌                         | 1/4 [00:00<00:01,  1.73it/s][A
-Iteration:  50%|█████████████████                 | 2/4 [00:00<00:01,  1.91it/s][A
-Iteration:  75%|█████████████████████████▌        | 3/4 [00:01<00:00,  2.06it/s][AIteration: 100%|██████████████████████████████████| 4/4 [00:01<00:00,  2.74it/s]
-Epoch:  14%|█████▍                                | 1/7 [00:01<00:08,  1.46s/it]
-Iteration:   0%|                                          | 0/4 [00:00<?, ?it/s][A
-Iteration:  25%|████████▌                         | 1/4 [00:00<00:01,  2.51it/s][A
-Iteration:  50%|█████████████████                 | 2/4 [00:00<00:00,  2.51it/s][A
-Iteration:  75%|█████████████████████████▌        | 3/4 [00:01<00:00,  2.52it/s][AIteration: 100%|██████████████████████████████████| 4/4 [00:01<00:00,  3.14it/s]
-Epoch:  29%|██████████▊                           | 2/7 [00:02<00:07,  1.41s/it]
-Iteration:   0%|                                          | 0/4 [00:00<?, ?it/s][A
-Iteration:  25%|████████▌                         | 1/4 [00:00<00:01,  2.52it/s][A
-Iteration:  50%|█████████████████                 | 2/4 [00:00<00:00,  2.51it/s][A
-Iteration:  75%|█████████████████████████▌        | 3/4 [00:01<00:00,  2.50it/s][AIteration: 100%|██████████████████████████████████| 4/4 [00:01<00:00,  3.09it/s]
-Epoch:  43%|████████████████▎                     | 3/7 [00:04<00:05,  1.37s/it]
-Iteration:   0%|                                          | 0/4 [00:00<?, ?it/s][A
-Iteration:  25%|████████▌                         | 1/4 [00:00<00:01,  2.54it/s][A
-Iteration:  50%|█████████████████                 | 2/4 [00:00<00:00,  2.53it/s][A
-Iteration:  75%|█████████████████████████▌        | 3/4 [00:01<00:00,  2.52it/s][AIteration: 100%|██████████████████████████████████| 4/4 [00:01<00:00,  3.11it/s]
-Epoch:  57%|█████████████████████▋                | 4/7 [00:05<00:04,  1.35s/it]
-Iteration:   0%|                                          | 0/4 [00:00<?, ?it/s][A
-Iteration:  25%|████████▌                         | 1/4 [00:00<00:01,  2.52it/s][A
-Iteration:  50%|█████████████████                 | 2/4 [00:00<00:00,  2.52it/s][A
-Iteration:  75%|█████████████████████████▌        | 3/4 [00:01<00:00,  2.52it/s][AIteration: 100%|██████████████████████████████████| 4/4 [00:01<00:00,  3.12it/s]
-Epoch:  71%|███████████████████████████▏          | 5/7 [00:06<00:02,  1.33s/it]
-Iteration:   0%|                                          | 0/4 [00:00<?, ?it/s][A
-Iteration:  25%|████████▌                         | 1/4 [00:00<00:01,  2.19it/s][A
-Iteration:  50%|█████████████████                 | 2/4 [00:00<00:00,  2.28it/s][A
-Iteration:  75%|█████████████████████████▌        | 3/4 [00:01<00:00,  2.35it/s][AIteration: 100%|██████████████████████████████████| 4/4 [00:01<00:00,  2.98it/s]
-Epoch:  86%|████████████████████████████████▌     | 6/7 [00:07<00:01,  1.33s/it]
-Iteration:   0%|                                          | 0/4 [00:00<?, ?it/s][A
-Iteration:  25%|████████▌                         | 1/4 [00:00<00:01,  2.53it/s][A
-Iteration:  50%|█████████████████                 | 2/4 [00:00<00:00,  2.52it/s][A
-Iteration:  75%|█████████████████████████▌        | 3/4 [00:01<00:00,  2.51it/s][AIteration: 100%|██████████████████████████████████| 4/4 [00:01<00:00,  3.10it/s]
-Epoch: 100%|██████████████████████████████████████| 7/7 [00:09<00:00,  1.32s/it]Epoch: 100%|██████████████████████████████████████| 7/7 [00:09<00:00,  1.32s/it]
-
-04/12/2021 06:27:10 - INFO - transformers.trainer -   
-
-Training completed. Do not forget to share your model on huggingface.co/models =)
-
-
-wandb: Waiting for W&B process to finish, PID 25917
-wandb: Program ended successfully.
-wandb: - 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb: \ 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb: | 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb: / 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb: - 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb: \ 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb: | 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb: / 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb: - 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb:                                                                                
-wandb: Find user logs for this run at: /home/datasci/CA-MTL/wandb/run-20210412_062700-2kwq0d8f/logs/debug.log
-wandb: Find internal logs for this run at: /home/datasci/CA-MTL/wandb/run-20210412_062700-2kwq0d8f/logs/debug-internal.log
-wandb: Run summary:
-
-wandb: Synced 5 W&B file(s), 1 media file(s), 0 artifact file(s) and 0 other file(s)
-wandb: 
-wandb: Synced amber-flower-6: https://wandb.ai/heatxg/huggingface/runs/2kwq0d8f
-

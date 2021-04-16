@@ -1,418 +1,0 @@
-04/12/2021 07:09:47 - INFO - transformers.training_args -   PyTorch: setting up devices
-04/12/2021 07:09:47 - WARNING - __main__ -   Process rank: -1, device: cuda, n_gpu: 1, distributed training: False, 16-bits training: False
-04/12/2021 07:09:47 - INFO - transformers.configuration_utils -   loading configuration file https://s3.amazonaws.com/models.huggingface.co/bert/huawei-noah/TinyBERT_General_6L_768D/config.json from cache at /home/datasci/.cache/torch/transformers/a2effe717003a3a536ff7bebc6107c97073ca65e9878930cb8b130651bb43b0f.1173f0740b7f056b864067e238c1c50ae7bb3344d34377e77818b5d00e944279
-04/12/2021 07:09:47 - INFO - transformers.configuration_utils -   Model config BertConfig {
-  "attention_probs_dropout_prob": 0.1,
-  "cell": {},
-  "hidden_act": "gelu",
-  "hidden_dropout_prob": 0.1,
-  "hidden_size": 768,
-  "initializer_range": 0.02,
-  "intermediate_size": 3072,
-  "layer_norm_eps": 1e-12,
-  "max_position_embeddings": 512,
-  "model_type": "bert",
-  "num_attention_heads": 12,
-  "num_hidden_layers": 6,
-  "pad_token_id": 0,
-  "pre_trained": "",
-  "structure": [],
-  "type_vocab_size": 2,
-  "vocab_size": 30522
-}
-
-04/12/2021 07:09:47 - INFO - transformers.modeling_utils -   loading weights file https://cdn.huggingface.co/huawei-noah/TinyBERT_General_6L_768D/pytorch_model.bin from cache at /home/datasci/.cache/torch/transformers/84451f9577b29a4f236f28261fd2603640828cb26a7fed13f70d043ddbca41d5.9d208358bccc05e7a1e0957ce9f4ad622ec4eeeadc384905fd19b6763c9cec2f
-04/12/2021 07:09:49 - INFO - transformers.modeling_utils -   Weights of CaMtl not initialized from pretrained model: ['bert.task_type_embeddings.weight', 'bert.conditional_alignment.gb_weights.weight', 'bert.conditional_alignment.gb_weights.bias', 'bert.encoder.task_transformation.weight', 'bert.encoder.task_transformation.bias', 'bert.encoder.layer.0.attention.self.random_weight_matrix', 'bert.encoder.layer.0.attention.self.cond_block_diag_attn.gb_weights.weight', 'bert.encoder.layer.0.attention.self.cond_block_diag_attn.gb_weights.bias', 'bert.encoder.layer.1.attention.self.random_weight_matrix', 'bert.encoder.layer.1.attention.self.cond_block_diag_attn.gb_weights.weight', 'bert.encoder.layer.1.attention.self.cond_block_diag_attn.gb_weights.bias', 'bert.encoder.layer.2.attention.self.random_weight_matrix', 'bert.encoder.layer.2.attention.self.cond_block_diag_attn.gb_weights.weight', 'bert.encoder.layer.2.attention.self.cond_block_diag_attn.gb_weights.bias', 'bert.encoder.layer.3.attention.self.random_weight_matrix', 'bert.encoder.layer.3.attention.self.cond_block_diag_attn.gb_weights.weight', 'bert.encoder.layer.3.attention.self.cond_block_diag_attn.gb_weights.bias', 'bert.encoder.layer.3.attention.output.LayerNorm.ln_weight_modulation.gb_weights.weight', 'bert.encoder.layer.3.attention.output.LayerNorm.ln_weight_modulation.gb_weights.bias', 'bert.encoder.layer.3.output.LayerNorm.ln_weight_modulation.gb_weights.weight', 'bert.encoder.layer.3.output.LayerNorm.ln_weight_modulation.gb_weights.bias', 'bert.encoder.layer.4.attention.self.random_weight_matrix', 'bert.encoder.layer.4.attention.self.cond_block_diag_attn.gb_weights.weight', 'bert.encoder.layer.4.attention.self.cond_block_diag_attn.gb_weights.bias', 'bert.encoder.layer.4.attention.output.LayerNorm.ln_weight_modulation.gb_weights.weight', 'bert.encoder.layer.4.attention.output.LayerNorm.ln_weight_modulation.gb_weights.bias', 'bert.encoder.layer.4.output.LayerNorm.ln_weight_modulation.gb_weights.weight', 'bert.encoder.layer.4.output.LayerNorm.ln_weight_modulation.gb_weights.bias', 'bert.encoder.layer.5.new_attention.self.random_weight_matrix', 'bert.encoder.layer.5.new_attention.self.query.weight', 'bert.encoder.layer.5.new_attention.self.query.bias', 'bert.encoder.layer.5.new_attention.self.key.weight', 'bert.encoder.layer.5.new_attention.self.key.bias', 'bert.encoder.layer.5.new_attention.self.value.weight', 'bert.encoder.layer.5.new_attention.self.value.bias', 'bert.encoder.layer.5.new_attention.self.cond_block_diag_attn.gb_weights.weight', 'bert.encoder.layer.5.new_attention.self.cond_block_diag_attn.gb_weights.bias', 'bert.encoder.layer.5.new_attention.output.dense.weight', 'bert.encoder.layer.5.new_attention.output.dense.bias', 'bert.encoder.layer.5.new_attention.output.LayerNorm.weight', 'bert.encoder.layer.5.new_attention.output.LayerNorm.bias', 'bert.encoder.layer.5.new_attention.output.LayerNorm.ln_weight_modulation.gb_weights.weight', 'bert.encoder.layer.5.new_attention.output.LayerNorm.ln_weight_modulation.gb_weights.bias', 'bert.encoder.layer.5.new_intermediate.dense.weight', 'bert.encoder.layer.5.new_intermediate.dense.bias', 'bert.encoder.layer.5.new_output.dense.weight', 'bert.encoder.layer.5.new_output.dense.bias', 'bert.encoder.layer.5.new_output.LayerNorm.weight', 'bert.encoder.layer.5.new_output.LayerNorm.bias', 'bert.encoder.layer.5.new_output.LayerNorm.ln_weight_modulation.gb_weights.weight', 'bert.encoder.layer.5.new_output.LayerNorm.ln_weight_modulation.gb_weights.bias', 'bert.encoder.layer.5.adapter.bottleneck.emb_transf.weight', 'bert.encoder.layer.5.adapter.bottleneck.emb_transf.bias', 'bert.encoder.layer.5.adapter.bottleneck.hidden_modulation.gb_weights.weight', 'bert.encoder.layer.5.adapter.bottleneck.hidden_modulation.gb_weights.bias', 'bert.encoder.layer.5.adapter.bottleneck.down_proj_layer.weight', 'bert.encoder.layer.5.adapter.bottleneck.down_proj_layer.bias', 'bert.encoder.layer.5.adapter.bottleneck.up_proj_layer.weight', 'bert.encoder.layer.5.adapter.bottleneck.up_proj_layer.bias', 'bert.encoder.layer.5.adapter.condlayernorm.weight', 'bert.encoder.layer.5.adapter.condlayernorm.bias', 'bert.encoder.layer.5.adapter.condlayernorm.ln_weight_modulation.gb_weights.weight', 'bert.encoder.layer.5.adapter.condlayernorm.ln_weight_modulation.gb_weights.bias', 'decoders.0.model.weight', 'decoders.0.model.bias', 'decoders.1.model.weight', 'decoders.1.model.bias']
-04/12/2021 07:09:49 - INFO - transformers.modeling_utils -   Weights from pretrained model not used in CaMtl: ['cls.predictions.bias', 'cls.predictions.transform.dense.weight', 'cls.predictions.transform.dense.bias', 'cls.predictions.transform.LayerNorm.weight', 'cls.predictions.transform.LayerNorm.bias', 'cls.predictions.decoder.weight', 'cls.seq_relationship.weight', 'cls.seq_relationship.bias', 'fit_denses.0.weight', 'fit_denses.0.bias', 'fit_denses.1.weight', 'fit_denses.1.bias', 'fit_denses.2.weight', 'fit_denses.2.bias', 'fit_denses.3.weight', 'fit_denses.3.bias', 'fit_denses.4.weight', 'fit_denses.4.bias', 'fit_denses.5.weight', 'fit_denses.5.bias', 'fit_denses.6.weight', 'fit_denses.6.bias', 'bert.encoder.layer.5.attention.self.query.weight', 'bert.encoder.layer.5.attention.self.query.bias', 'bert.encoder.layer.5.attention.self.key.weight', 'bert.encoder.layer.5.attention.self.key.bias', 'bert.encoder.layer.5.attention.self.value.weight', 'bert.encoder.layer.5.attention.self.value.bias', 'bert.encoder.layer.5.attention.output.dense.weight', 'bert.encoder.layer.5.attention.output.dense.bias', 'bert.encoder.layer.5.attention.output.LayerNorm.weight', 'bert.encoder.layer.5.attention.output.LayerNorm.bias', 'bert.encoder.layer.5.intermediate.dense.weight', 'bert.encoder.layer.5.intermediate.dense.bias', 'bert.encoder.layer.5.output.dense.weight', 'bert.encoder.layer.5.output.dense.bias', 'bert.encoder.layer.5.output.LayerNorm.weight', 'bert.encoder.layer.5.output.LayerNorm.bias']
-04/12/2021 07:09:49 - INFO - __main__ -   CaMtl(
-  (bert): CaMtlBaseEncoder(
-    (task_type_embeddings): Embedding(2, 768)
-    (conditional_alignment): FiLM(
-      (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-    )
-    (embeddings): BertEmbeddings(
-      (word_embeddings): Embedding(30522, 768, padding_idx=0)
-      (position_embeddings): Embedding(512, 768)
-      (token_type_embeddings): Embedding(2, 768)
-      (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
-      (dropout): Dropout(p=0.1, inplace=False)
-    )
-    (encoder): MyBertEncoder9(
-      (task_transformation): Linear(in_features=768, out_features=768, bias=True)
-      (layer): ModuleList(
-        (0): BertLayer9(
-          (attention): MyBertAttention9(
-            (self): MyBertSelfAttention9(
-              (query): Linear(in_features=768, out_features=768, bias=True)
-              (key): Linear(in_features=768, out_features=768, bias=True)
-              (value): Linear(in_features=768, out_features=768, bias=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-              (cond_block_diag_attn): CBDA(
-                (gb_weights): Linear(in_features=768, out_features=172, bias=True)
-              )
-            )
-            (output): BertSelfOutput(
-              (dense): Linear(in_features=768, out_features=768, bias=True)
-              (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-            )
-          )
-          (intermediate): BertIntermediate(
-            (dense): Linear(in_features=768, out_features=3072, bias=True)
-          )
-          (output): BertOutput(
-            (dense): Linear(in_features=3072, out_features=768, bias=True)
-            (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
-            (dropout): Dropout(p=0.1, inplace=False)
-          )
-        )
-        (1): BertLayer9(
-          (attention): MyBertAttention9(
-            (self): MyBertSelfAttention9(
-              (query): Linear(in_features=768, out_features=768, bias=True)
-              (key): Linear(in_features=768, out_features=768, bias=True)
-              (value): Linear(in_features=768, out_features=768, bias=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-              (cond_block_diag_attn): CBDA(
-                (gb_weights): Linear(in_features=768, out_features=172, bias=True)
-              )
-            )
-            (output): BertSelfOutput(
-              (dense): Linear(in_features=768, out_features=768, bias=True)
-              (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-            )
-          )
-          (intermediate): BertIntermediate(
-            (dense): Linear(in_features=768, out_features=3072, bias=True)
-          )
-          (output): BertOutput(
-            (dense): Linear(in_features=3072, out_features=768, bias=True)
-            (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
-            (dropout): Dropout(p=0.1, inplace=False)
-          )
-        )
-        (2): BertLayer9(
-          (attention): MyBertAttention9(
-            (self): MyBertSelfAttention9(
-              (query): Linear(in_features=768, out_features=768, bias=True)
-              (key): Linear(in_features=768, out_features=768, bias=True)
-              (value): Linear(in_features=768, out_features=768, bias=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-              (cond_block_diag_attn): CBDA(
-                (gb_weights): Linear(in_features=768, out_features=172, bias=True)
-              )
-            )
-            (output): BertSelfOutput(
-              (dense): Linear(in_features=768, out_features=768, bias=True)
-              (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-            )
-          )
-          (intermediate): BertIntermediate(
-            (dense): Linear(in_features=768, out_features=3072, bias=True)
-          )
-          (output): BertOutput(
-            (dense): Linear(in_features=3072, out_features=768, bias=True)
-            (LayerNorm): LayerNorm((768,), eps=1e-12, elementwise_affine=True)
-            (dropout): Dropout(p=0.1, inplace=False)
-          )
-        )
-        (3): MyBertLayer9(
-          (attention): MyBertAttention9(
-            (self): MyBertSelfAttention9(
-              (query): Linear(in_features=768, out_features=768, bias=True)
-              (key): Linear(in_features=768, out_features=768, bias=True)
-              (value): Linear(in_features=768, out_features=768, bias=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-              (cond_block_diag_attn): CBDA(
-                (gb_weights): Linear(in_features=768, out_features=172, bias=True)
-              )
-            )
-            (output): MyBertSelfOutput9(
-              (dense): Linear(in_features=768, out_features=768, bias=True)
-              (LayerNorm): ConditionalLayerNorm(
-                (768,), 768, eps=1e-12
-                (ln_weight_modulation): FiLM(
-                  (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-                )
-              )
-              (dropout): Dropout(p=0.1, inplace=False)
-            )
-          )
-          (intermediate): BertIntermediate(
-            (dense): Linear(in_features=768, out_features=3072, bias=True)
-          )
-          (output): MyBertOutput9(
-            (dense): Linear(in_features=3072, out_features=768, bias=True)
-            (LayerNorm): ConditionalLayerNorm(
-              (768,), 768, eps=1e-12
-              (ln_weight_modulation): FiLM(
-                (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-              )
-            )
-            (dropout): Dropout(p=0.1, inplace=False)
-          )
-        )
-        (4): MyBertLayer9(
-          (attention): MyBertAttention9(
-            (self): MyBertSelfAttention9(
-              (query): Linear(in_features=768, out_features=768, bias=True)
-              (key): Linear(in_features=768, out_features=768, bias=True)
-              (value): Linear(in_features=768, out_features=768, bias=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-              (cond_block_diag_attn): CBDA(
-                (gb_weights): Linear(in_features=768, out_features=172, bias=True)
-              )
-            )
-            (output): MyBertSelfOutput9(
-              (dense): Linear(in_features=768, out_features=768, bias=True)
-              (LayerNorm): ConditionalLayerNorm(
-                (768,), 768, eps=1e-12
-                (ln_weight_modulation): FiLM(
-                  (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-                )
-              )
-              (dropout): Dropout(p=0.1, inplace=False)
-            )
-          )
-          (intermediate): BertIntermediate(
-            (dense): Linear(in_features=768, out_features=3072, bias=True)
-          )
-          (output): MyBertOutput9(
-            (dense): Linear(in_features=3072, out_features=768, bias=True)
-            (LayerNorm): ConditionalLayerNorm(
-              (768,), 768, eps=1e-12
-              (ln_weight_modulation): FiLM(
-                (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-              )
-            )
-            (dropout): Dropout(p=0.1, inplace=False)
-          )
-        )
-        (5): MyBertAdapterLayer9(
-          (new_attention): MyBertAttention9(
-            (self): MyBertSelfAttention9(
-              (query): Linear(in_features=768, out_features=768, bias=True)
-              (key): Linear(in_features=768, out_features=768, bias=True)
-              (value): Linear(in_features=768, out_features=768, bias=True)
-              (dropout): Dropout(p=0.1, inplace=False)
-              (cond_block_diag_attn): CBDA(
-                (gb_weights): Linear(in_features=768, out_features=172, bias=True)
-              )
-            )
-            (output): MyBertSelfOutput9(
-              (dense): Linear(in_features=768, out_features=768, bias=True)
-              (LayerNorm): ConditionalLayerNorm(
-                (768,), 768, eps=1e-12
-                (ln_weight_modulation): FiLM(
-                  (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-                )
-              )
-              (dropout): Dropout(p=0.1, inplace=False)
-            )
-          )
-          (new_intermediate): BertIntermediate(
-            (dense): Linear(in_features=768, out_features=3072, bias=True)
-          )
-          (new_output): MyBertOutput9(
-            (dense): Linear(in_features=3072, out_features=768, bias=True)
-            (LayerNorm): ConditionalLayerNorm(
-              (768,), 768, eps=1e-12
-              (ln_weight_modulation): FiLM(
-                (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-              )
-            )
-            (dropout): Dropout(p=0.1, inplace=False)
-          )
-          (adapter): BertAdapter9(
-            (bottleneck): ConditionalBottleNeck(
-              (emb_transf): Linear(in_features=768, out_features=768, bias=True)
-              (hidden_modulation): FiLM(
-                (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-              )
-              (down_proj_layer): Linear(in_features=768, out_features=256, bias=True)
-              (up_proj_layer): Linear(in_features=256, out_features=768, bias=True)
-            )
-            (condlayernorm): ConditionalLayerNorm(
-              (768,), 768, eps=1e-12
-              (ln_weight_modulation): FiLM(
-                (gb_weights): Linear(in_features=768, out_features=1536, bias=True)
-              )
-            )
-          )
-        )
-      )
-    )
-    (pooler): BertPooler(
-      (dense): Linear(in_features=768, out_features=768, bias=True)
-      (activation): Tanh()
-    )
-  )
-  (decoders): ModuleList(
-    (0): Decoder(
-      (dropout): Dropout(p=0.1, inplace=False)
-      (model): Linear(in_features=768, out_features=17, bias=True)
-    )
-    (1): Decoder(
-      (dropout): Dropout(p=0.1, inplace=False)
-      (model): Linear(in_features=768, out_features=114, bias=True)
-    )
-  )
-)
-04/12/2021 07:09:49 - INFO - transformers.tokenization_utils -   Model name 'huawei-noah/TinyBERT_General_6L_768D' not found in model shortcut name list (bert-base-uncased, bert-large-uncased, bert-base-cased, bert-large-cased, bert-base-multilingual-uncased, bert-base-multilingual-cased, bert-base-chinese, bert-base-german-cased, bert-large-uncased-whole-word-masking, bert-large-cased-whole-word-masking, bert-large-uncased-whole-word-masking-finetuned-squad, bert-large-cased-whole-word-masking-finetuned-squad, bert-base-cased-finetuned-mrpc, bert-base-german-dbmdz-cased, bert-base-german-dbmdz-uncased, TurkuNLP/bert-base-finnish-cased-v1, TurkuNLP/bert-base-finnish-uncased-v1, wietsedv/bert-base-dutch-cased). Assuming 'huawei-noah/TinyBERT_General_6L_768D' is a path, a model identifier, or url to a directory containing tokenizer files.
-04/12/2021 07:09:51 - INFO - transformers.tokenization_utils -   loading file https://s3.amazonaws.com/models.huggingface.co/bert/huawei-noah/TinyBERT_General_6L_768D/vocab.txt from cache at /home/datasci/.cache/torch/transformers/f3df129df0d2a6b551ca9c604c897a2fffe0138d43f74685fa0fe4837e51f986.542ce4285a40d23a559526243235df47c5f75c197f04f37d1a0c124c32c9a084
-04/12/2021 07:09:51 - INFO - transformers.tokenization_utils -   loading file https://s3.amazonaws.com/models.huggingface.co/bert/huawei-noah/TinyBERT_General_6L_768D/added_tokens.json from cache at None
-04/12/2021 07:09:51 - INFO - transformers.tokenization_utils -   loading file https://s3.amazonaws.com/models.huggingface.co/bert/huawei-noah/TinyBERT_General_6L_768D/special_tokens_map.json from cache at None
-04/12/2021 07:09:51 - INFO - transformers.tokenization_utils -   loading file https://s3.amazonaws.com/models.huggingface.co/bert/huawei-noah/TinyBERT_General_6L_768D/tokenizer_config.json from cache at None
-04/12/2021 07:09:51 - INFO - __main__ -   Training tasks: D0, D1
-04/12/2021 07:09:51 - INFO - filelock -   Lock 139910707853712 acquired on /hub/CA-MTL/data/D0/2021_04_08/cached_train_BertTokenizer_256_D0.lock
-04/12/2021 07:09:51 - INFO - src.data.data_utils -   Loading features from cached file /hub/CA-MTL/data/D0/2021_04_08/cached_train_BertTokenizer_256_D0 [took 0.001 s]
-04/12/2021 07:09:51 - INFO - filelock -   Lock 139910707853712 released on /hub/CA-MTL/data/D0/2021_04_08/cached_train_BertTokenizer_256_D0.lock
-04/12/2021 07:09:51 - INFO - filelock -   Lock 139910707854544 acquired on /hub/CA-MTL/data/D1/2021_04_08/cached_train_BertTokenizer_256_D1.lock
-04/12/2021 07:09:51 - INFO - src.data.data_utils -   Loading features from cached file /hub/CA-MTL/data/D1/2021_04_08/cached_train_BertTokenizer_256_D1 [took 0.000 s]
-04/12/2021 07:09:51 - INFO - filelock -   Lock 139910707854544 released on /hub/CA-MTL/data/D1/2021_04_08/cached_train_BertTokenizer_256_D1.lock
-04/12/2021 07:09:51 - INFO - filelock -   Lock 139910707852112 acquired on /hub/CA-MTL/data/D0/2021_04_08/cached_dev_BertTokenizer_256_D0.lock
-04/12/2021 07:09:51 - INFO - src.data.data_utils -   Loading features from cached file /hub/CA-MTL/data/D0/2021_04_08/cached_dev_BertTokenizer_256_D0 [took 0.026 s]
-04/12/2021 07:09:51 - INFO - filelock -   Lock 139910707852112 released on /hub/CA-MTL/data/D0/2021_04_08/cached_dev_BertTokenizer_256_D0.lock
-04/12/2021 07:09:51 - INFO - filelock -   Lock 139910707854736 acquired on /hub/CA-MTL/data/D1/2021_04_08/cached_dev_BertTokenizer_256_D1.lock
-04/12/2021 07:09:51 - INFO - src.data.data_utils -   Loading features from cached file /hub/CA-MTL/data/D1/2021_04_08/cached_dev_BertTokenizer_256_D1 [took 0.025 s]
-04/12/2021 07:09:51 - INFO - filelock -   Lock 139910707854736 released on /hub/CA-MTL/data/D1/2021_04_08/cached_dev_BertTokenizer_256_D1.lock
-04/12/2021 07:09:51 - INFO - filelock -   Lock 139910707854544 acquired on /hub/CA-MTL/data/D0/2021_04_08/cached_test_BertTokenizer_256_D0.lock
-04/12/2021 07:09:51 - INFO - src.data.data_utils -   Loading features from cached file /hub/CA-MTL/data/D0/2021_04_08/cached_test_BertTokenizer_256_D0 [took 0.247 s]
-04/12/2021 07:09:51 - INFO - filelock -   Lock 139910707854544 released on /hub/CA-MTL/data/D0/2021_04_08/cached_test_BertTokenizer_256_D0.lock
-04/12/2021 07:09:51 - INFO - filelock -   Lock 139910162899344 acquired on /hub/CA-MTL/data/D1/2021_04_08/cached_test_BertTokenizer_256_D1.lock
-04/12/2021 07:09:51 - INFO - src.data.data_utils -   Loading features from cached file /hub/CA-MTL/data/D1/2021_04_08/cached_test_BertTokenizer_256_D1 [took 0.178 s]
-04/12/2021 07:09:51 - INFO - filelock -   Lock 139910162899344 released on /hub/CA-MTL/data/D1/2021_04_08/cached_test_BertTokenizer_256_D1.lock
-04/12/2021 07:09:53 - WARNING - transformers.trainer -   You are instantiating a Trainer but Tensorboard is not installed. You should consider installing it.
-04/12/2021 07:09:53 - INFO - transformers.trainer -   Automatic Weights & Biases logging enabled, to disable set os.environ["WANDB_DISABLED"] = "true"
-wandb: Currently logged in as: heatxg (use `wandb login --relogin` to force relogin)
-wandb: Tracking run with wandb version 0.10.25
-wandb: Syncing run solar-night-10
-wandb: ⭐️ View project at https://wandb.ai/heatxg/huggingface
-wandb: 🚀 View run at https://wandb.ai/heatxg/huggingface/runs/2nzy21qj
-wandb: Run data is saved locally in /home/datasci/CA-MTL/wandb/run-20210412_070953-2nzy21qj
-wandb: Run `wandb offline` to turn off syncing.
-04/12/2021 07:09:54 - INFO - transformers.trainer -   ***** Running training *****
-04/12/2021 07:09:54 - INFO - transformers.trainer -     Num examples = 100
-04/12/2021 07:09:54 - INFO - transformers.trainer -     Num Epochs = 7
-04/12/2021 07:09:54 - INFO - transformers.trainer -     Instantaneous batch size per device = 32
-04/12/2021 07:09:54 - INFO - transformers.trainer -     Total train batch size (w. parallel, distributed & accumulation) = 32
-04/12/2021 07:09:54 - INFO - transformers.trainer -     Gradient Accumulation steps = 1
-04/12/2021 07:09:54 - INFO - transformers.trainer -     Total optimization steps = 28
-Epoch:   0%|                                              | 0/7 [00:00<?, ?it/s]
-Iteration:   0%|                                          | 0/4 [00:00<?, ?it/s][A
-Iteration:  25%|████████▌                         | 1/4 [00:00<00:01,  1.75it/s][A
-Iteration:  50%|█████████████████                 | 2/4 [00:00<00:01,  1.93it/s][A
-Iteration:  75%|█████████████████████████▌        | 3/4 [00:01<00:00,  2.08it/s][AIteration: 100%|██████████████████████████████████| 4/4 [00:01<00:00,  2.77it/s]
-Epoch:  14%|█████▍                                | 1/7 [00:01<00:08,  1.45s/it]
-Iteration:   0%|                                          | 0/4 [00:00<?, ?it/s][A
-Iteration:  25%|████████▌                         | 1/4 [00:00<00:01,  2.53it/s][A
-Iteration:  50%|█████████████████                 | 2/4 [00:00<00:00,  2.51it/s][A
-Iteration:  75%|█████████████████████████▌        | 3/4 [00:01<00:00,  2.50it/s][AIteration: 100%|██████████████████████████████████| 4/4 [00:01<00:00,  3.11it/s]
-Epoch:  29%|██████████▊                           | 2/7 [00:02<00:06,  1.40s/it]
-Iteration:   0%|                                          | 0/4 [00:00<?, ?it/s][A
-Iteration:  25%|████████▌                         | 1/4 [00:00<00:01,  2.50it/s][A
-Iteration:  50%|█████████████████                 | 2/4 [00:00<00:00,  2.51it/s][A
-Iteration:  75%|█████████████████████████▌        | 3/4 [00:01<00:00,  2.50it/s][AIteration: 100%|██████████████████████████████████| 4/4 [00:01<00:00,  3.08it/s]
-Epoch:  43%|████████████████▎                     | 3/7 [00:04<00:05,  1.37s/it]
-Iteration:   0%|                                          | 0/4 [00:00<?, ?it/s][A
-Iteration:  25%|████████▌                         | 1/4 [00:00<00:01,  2.51it/s][A
-Iteration:  50%|█████████████████                 | 2/4 [00:00<00:00,  2.51it/s][A
-Iteration:  75%|█████████████████████████▌        | 3/4 [00:01<00:00,  2.52it/s][AIteration: 100%|██████████████████████████████████| 4/4 [00:01<00:00,  3.11it/s]
-Epoch:  57%|█████████████████████▋                | 4/7 [00:05<00:04,  1.34s/it]
-Iteration:   0%|                                          | 0/4 [00:00<?, ?it/s][A
-Iteration:  25%|████████▌                         | 1/4 [00:00<00:01,  2.54it/s][A
-Iteration:  50%|█████████████████                 | 2/4 [00:00<00:00,  2.52it/s][A
-Iteration:  75%|█████████████████████████▌        | 3/4 [00:01<00:00,  2.51it/s][AIteration: 100%|██████████████████████████████████| 4/4 [00:01<00:00,  3.10it/s]
-Epoch:  71%|███████████████████████████▏          | 5/7 [00:06<00:02,  1.33s/it]
-Iteration:   0%|                                          | 0/4 [00:00<?, ?it/s][A
-Iteration:  25%|████████▌                         | 1/4 [00:00<00:01,  2.52it/s][A
-Iteration:  50%|█████████████████                 | 2/4 [00:00<00:00,  2.52it/s][A
-Iteration:  75%|█████████████████████████▌        | 3/4 [00:01<00:00,  2.51it/s][AIteration: 100%|██████████████████████████████████| 4/4 [00:01<00:00,  3.10it/s]
-Epoch:  86%|████████████████████████████████▌     | 6/7 [00:07<00:01,  1.32s/it]
-Iteration:   0%|                                          | 0/4 [00:00<?, ?it/s][A
-Iteration:  25%|████████▌                         | 1/4 [00:00<00:01,  2.51it/s][A
-Iteration:  50%|█████████████████                 | 2/4 [00:00<00:00,  2.51it/s][A
-Iteration:  75%|█████████████████████████▌        | 3/4 [00:01<00:00,  2.52it/s][AIteration: 100%|██████████████████████████████████| 4/4 [00:01<00:00,  3.11it/s]
-Epoch: 100%|██████████████████████████████████████| 7/7 [00:09<00:00,  1.31s/it]Epoch: 100%|██████████████████████████████████████| 7/7 [00:09<00:00,  1.31s/it]
-04/12/2021 07:10:03 - INFO - transformers.trainer -   
-
-Training completed. Do not forget to share your model on huggingface.co/models =)
-
-
-04/12/2021 07:10:03 - INFO - src.mtl_trainer -   *** Evaluate on dev ***
-04/12/2021 07:10:03 - INFO - src.mtl_trainer -   D0
-04/12/2021 07:10:03 - INFO - transformers.trainer -   ***** Running Evaluation *****
-04/12/2021 07:10:03 - INFO - transformers.trainer -     Num examples = 1776
-04/12/2021 07:10:03 - INFO - transformers.trainer -     Batch size = 32
-Evaluation:   0%|                                        | 0/56 [00:00<?, ?it/s]Evaluation:   2%|▌                               | 1/56 [00:00<00:07,  7.62it/s]Evaluation:   4%|█▏                              | 2/56 [00:00<00:07,  7.63it/s]Evaluation:   5%|█▋                              | 3/56 [00:00<00:06,  7.63it/s]Evaluation:   7%|██▎                             | 4/56 [00:00<00:06,  7.62it/s]Evaluation:   9%|██▊                             | 5/56 [00:00<00:06,  7.62it/s]Evaluation:  11%|███▍                            | 6/56 [00:00<00:06,  7.62it/s]Evaluation:  12%|████                            | 7/56 [00:00<00:06,  7.62it/s]Evaluation:  14%|████▌                           | 8/56 [00:01<00:06,  7.62it/s]Evaluation:  16%|█████▏                          | 9/56 [00:01<00:06,  7.62it/s]Evaluation:  18%|█████▌                         | 10/56 [00:01<00:06,  7.61it/s]Evaluation:  20%|██████                         | 11/56 [00:01<00:05,  7.62it/s]Evaluation:  21%|██████▋                        | 12/56 [00:01<00:05,  7.62it/s]Evaluation:  23%|███████▏                       | 13/56 [00:01<00:05,  7.60it/s]Evaluation:  25%|███████▊                       | 14/56 [00:01<00:05,  7.60it/s]Evaluation:  27%|████████▎                      | 15/56 [00:01<00:05,  7.63it/s]Evaluation:  29%|████████▊                      | 16/56 [00:02<00:05,  7.63it/s]Evaluation:  30%|█████████▍                     | 17/56 [00:02<00:05,  7.60it/s]Evaluation:  32%|█████████▉                     | 18/56 [00:02<00:04,  7.62it/s]Evaluation:  34%|██████████▌                    | 19/56 [00:02<00:04,  7.61it/s]Evaluation:  36%|███████████                    | 20/56 [00:02<00:04,  7.62it/s]Evaluation:  38%|███████████▋                   | 21/56 [00:02<00:04,  7.63it/s]Evaluation:  39%|████████████▏                  | 22/56 [00:02<00:04,  7.64it/s]Evaluation:  41%|████████████▋                  | 23/56 [00:03<00:04,  7.63it/s]Evaluation:  43%|█████████████▎                 | 24/56 [00:03<00:04,  7.63it/s]Evaluation:  45%|█████████████▊                 | 25/56 [00:03<00:04,  7.64it/s]Evaluation:  46%|██████████████▍                | 26/56 [00:03<00:03,  7.64it/s]Evaluation:  48%|██████████████▉                | 27/56 [00:03<00:03,  7.68it/s]Evaluation:  50%|███████████████▌               | 28/56 [00:03<00:03,  7.66it/s]Evaluation:  52%|████████████████               | 29/56 [00:03<00:03,  7.66it/s]Evaluation:  54%|████████████████▌              | 30/56 [00:03<00:03,  7.65it/s]Evaluation:  55%|█████████████████▏             | 31/56 [00:04<00:03,  7.62it/s]Evaluation:  57%|█████████████████▋             | 32/56 [00:04<00:03,  7.63it/s]Evaluation:  59%|██████████████████▎            | 33/56 [00:04<00:03,  7.66it/s]Evaluation:  61%|██████████████████▊            | 34/56 [00:04<00:02,  7.65it/s]Evaluation:  62%|███████████████████▍           | 35/56 [00:04<00:02,  7.62it/s]Evaluation:  64%|███████████████████▉           | 36/56 [00:04<00:02,  7.62it/s]Evaluation:  66%|████████████████████▍          | 37/56 [00:04<00:02,  7.61it/s]Evaluation:  68%|█████████████████████          | 38/56 [00:04<00:02,  7.61it/s]Evaluation:  70%|█████████████████████▌         | 39/56 [00:05<00:02,  7.61it/s]Evaluation:  71%|██████████████████████▏        | 40/56 [00:05<00:02,  7.61it/s]Evaluation:  73%|██████████████████████▋        | 41/56 [00:05<00:01,  7.61it/s]Evaluation:  75%|███████████████████████▎       | 42/56 [00:05<00:01,  7.61it/s]Evaluation:  77%|███████████████████████▊       | 43/56 [00:05<00:01,  7.63it/s]Evaluation:  79%|████████████████████████▎      | 44/56 [00:05<00:01,  7.62it/s]Evaluation:  80%|████████████████████████▉      | 45/56 [00:05<00:01,  7.61it/s]Evaluation:  82%|█████████████████████████▍     | 46/56 [00:06<00:01,  7.61it/s]Evaluation:  84%|██████████████████████████     | 47/56 [00:06<00:01,  7.61it/s]Evaluation:  86%|██████████████████████████▌    | 48/56 [00:06<00:01,  7.62it/s]Evaluation:  88%|███████████████████████████▏   | 49/56 [00:06<00:00,  7.62it/s]Evaluation:  89%|███████████████████████████▋   | 50/56 [00:06<00:00,  7.61it/s]Evaluation:  91%|████████████████████████████▏  | 51/56 [00:06<00:00,  7.62it/s]Evaluation:  93%|████████████████████████████▊  | 52/56 [00:06<00:00,  7.66it/s]Evaluation:  95%|█████████████████████████████▎ | 53/56 [00:06<00:00,  7.63it/s]Evaluation:  96%|█████████████████████████████▉ | 54/56 [00:07<00:00,  7.63it/s]Evaluation:  98%|██████████████████████████████▍| 55/56 [00:07<00:00,  7.62it/s]Evaluation: 100%|███████████████████████████████| 56/56 [00:07<00:00,  7.69it/s]
-/home/datasci/anaconda3/envs/ca-mtl-env/lib/python3.7/site-packages/sklearn/metrics/_classification.py:900: RuntimeWarning: invalid value encountered in double_scalars
-  mcc = cov_ytyp / np.sqrt(cov_ytyt * cov_ypyp)
-04/12/2021 07:10:10 - INFO - src.mtl_trainer -     eval_loss = 3.667119571140834
-04/12/2021 07:10:10 - INFO - src.mtl_trainer -     eval_matthews_corrcoef = 0.0
-04/12/2021 07:10:10 - INFO - src.mtl_trainer -     eval_acc = 0.1266891891891892
-04/12/2021 07:10:10 - INFO - src.mtl_trainer -     eval_f1_micro = 0.1266891891891892
-04/12/2021 07:10:10 - INFO - src.mtl_trainer -     eval_f1_weighted = 0.02849082215648932
-04/12/2021 07:10:10 - INFO - src.mtl_trainer -     eval_acc_and_f1_weighted = 0.07759000567283926
-04/12/2021 07:10:10 - INFO - src.mtl_trainer -     epoch = 7.0
-04/12/2021 07:10:10 - INFO - src.mtl_trainer -   D1
-04/12/2021 07:10:10 - INFO - transformers.trainer -   ***** Running Evaluation *****
-04/12/2021 07:10:10 - INFO - transformers.trainer -     Num examples = 1813
-04/12/2021 07:10:10 - INFO - transformers.trainer -     Batch size = 32
-Evaluation:   0%|                                        | 0/57 [00:00<?, ?it/s]Evaluation:   2%|▌                               | 1/57 [00:00<00:07,  7.66it/s]Evaluation:   4%|█                               | 2/57 [00:00<00:07,  7.65it/s]Evaluation:   5%|█▋                              | 3/57 [00:00<00:07,  7.64it/s]Evaluation:   7%|██▏                             | 4/57 [00:00<00:06,  7.64it/s]Evaluation:   9%|██▊                             | 5/57 [00:00<00:06,  7.63it/s]Evaluation:  11%|███▎                            | 6/57 [00:00<00:06,  7.62it/s]Evaluation:  12%|███▉                            | 7/57 [00:00<00:06,  7.62it/s]Evaluation:  14%|████▍                           | 8/57 [00:01<00:06,  7.62it/s]Evaluation:  16%|█████                           | 9/57 [00:01<00:06,  7.62it/s]Evaluation:  18%|█████▍                         | 10/57 [00:01<00:06,  7.61it/s]Evaluation:  19%|█████▉                         | 11/57 [00:01<00:06,  7.61it/s]Evaluation:  21%|██████▌                        | 12/57 [00:01<00:05,  7.64it/s]Evaluation:  23%|███████                        | 13/57 [00:01<00:05,  7.63it/s]Evaluation:  25%|███████▌                       | 14/57 [00:01<00:05,  7.60it/s]Evaluation:  26%|████████▏                      | 15/57 [00:01<00:05,  7.62it/s]Evaluation:  28%|████████▋                      | 16/57 [00:02<00:05,  7.63it/s]Evaluation:  30%|█████████▏                     | 17/57 [00:02<00:05,  7.63it/s]Evaluation:  32%|█████████▊                     | 18/57 [00:02<00:05,  7.64it/s]Evaluation:  33%|██████████▎                    | 19/57 [00:02<00:04,  7.63it/s]Evaluation:  35%|██████████▉                    | 20/57 [00:02<00:04,  7.64it/s]Evaluation:  37%|███████████▍                   | 21/57 [00:02<00:04,  7.64it/s]Evaluation:  39%|███████████▉                   | 22/57 [00:02<00:04,  7.63it/s]Evaluation:  40%|████████████▌                  | 23/57 [00:03<00:04,  7.62it/s]Evaluation:  42%|█████████████                  | 24/57 [00:03<00:04,  7.61it/s]Evaluation:  44%|█████████████▌                 | 25/57 [00:03<00:04,  7.61it/s]Evaluation:  46%|██████████████▏                | 26/57 [00:03<00:04,  7.61it/s]Evaluation:  47%|██████████████▋                | 27/57 [00:03<00:03,  7.65it/s]Evaluation:  49%|███████████████▏               | 28/57 [00:03<00:03,  7.63it/s]Evaluation:  51%|███████████████▊               | 29/57 [00:03<00:03,  7.63it/s]Evaluation:  53%|████████████████▎              | 30/57 [00:03<00:03,  7.65it/s]Evaluation:  54%|████████████████▊              | 31/57 [00:04<00:03,  7.63it/s]Evaluation:  56%|█████████████████▍             | 32/57 [00:04<00:03,  7.60it/s]Evaluation:  58%|█████████████████▉             | 33/57 [00:04<00:03,  7.62it/s]Evaluation:  60%|██████████████████▍            | 34/57 [00:04<00:02,  7.69it/s]Evaluation:  61%|███████████████████            | 35/57 [00:04<00:02,  7.66it/s]Evaluation:  63%|███████████████████▌           | 36/57 [00:04<00:02,  7.63it/s]Evaluation:  65%|████████████████████           | 37/57 [00:04<00:02,  7.62it/s]Evaluation:  67%|████████████████████▋          | 38/57 [00:04<00:02,  7.62it/s]Evaluation:  68%|█████████████████████▏         | 39/57 [00:05<00:02,  7.63it/s]Evaluation:  70%|█████████████████████▊         | 40/57 [00:05<00:02,  7.64it/s]Evaluation:  72%|██████████████████████▎        | 41/57 [00:05<00:02,  7.67it/s]Evaluation:  74%|██████████████████████▊        | 42/57 [00:05<00:01,  7.63it/s]Evaluation:  75%|███████████████████████▍       | 43/57 [00:05<00:01,  7.63it/s]Evaluation:  77%|███████████████████████▉       | 44/57 [00:05<00:01,  7.63it/s]Evaluation:  79%|████████████████████████▍      | 45/57 [00:05<00:01,  7.64it/s]Evaluation:  81%|█████████████████████████      | 46/57 [00:06<00:01,  7.62it/s]Evaluation:  82%|█████████████████████████▌     | 47/57 [00:06<00:01,  7.62it/s]Evaluation:  84%|██████████████████████████     | 48/57 [00:06<00:01,  7.65it/s]Evaluation:  86%|██████████████████████████▋    | 49/57 [00:06<00:01,  7.63it/s]Evaluation:  88%|███████████████████████████▏   | 50/57 [00:06<00:00,  7.61it/s]Evaluation:  89%|███████████████████████████▋   | 51/57 [00:06<00:00,  7.61it/s]Evaluation:  91%|████████████████████████████▎  | 52/57 [00:06<00:00,  7.62it/s]Evaluation:  93%|████████████████████████████▊  | 53/57 [00:06<00:00,  7.62it/s]Evaluation:  95%|█████████████████████████████▎ | 54/57 [00:07<00:00,  7.62it/s]Evaluation:  96%|█████████████████████████████▉ | 55/57 [00:07<00:00,  7.62it/s]Evaluation:  98%|██████████████████████████████▍| 56/57 [00:07<00:00,  7.61it/s]Evaluation: 100%|███████████████████████████████| 57/57 [00:07<00:00,  7.67it/s]
-04/12/2021 07:10:18 - INFO - src.mtl_trainer -     eval_loss = 5.5155757017302935
-04/12/2021 07:10:18 - INFO - src.mtl_trainer -     eval_matthews_corrcoef = 0.0
-04/12/2021 07:10:18 - INFO - src.mtl_trainer -     eval_acc = 0.007170435741864313
-04/12/2021 07:10:18 - INFO - src.mtl_trainer -     eval_f1_micro = 0.007170435741864313
-04/12/2021 07:10:18 - INFO - src.mtl_trainer -     eval_f1_weighted = 0.00010209820881077336
-04/12/2021 07:10:18 - INFO - src.mtl_trainer -     eval_acc_and_f1_weighted = 0.0036362669753375433
-04/12/2021 07:10:18 - INFO - src.mtl_trainer -     epoch = 7.0
-04/12/2021 07:10:18 - INFO - root -   *** Test ***
-04/12/2021 07:10:18 - INFO - src.mtl_trainer -   D0
-04/12/2021 07:10:18 - INFO - transformers.trainer -   ***** Running Prediction *****
-04/12/2021 07:10:18 - INFO - transformers.trainer -     Num examples = 1836
-04/12/2021 07:10:18 - INFO - transformers.trainer -     Batch size = 32
-Prediction:   0%|                                        | 0/58 [00:00<?, ?it/s]Prediction:   2%|▌                               | 1/58 [00:00<00:07,  7.66it/s]Prediction:   3%|█                               | 2/58 [00:00<00:07,  7.64it/s]Prediction:   5%|█▋                              | 3/58 [00:00<00:07,  7.63it/s]Prediction:   7%|██▏                             | 4/58 [00:00<00:07,  7.64it/s]Prediction:   9%|██▊                             | 5/58 [00:00<00:06,  7.64it/s]Prediction:  10%|███▎                            | 6/58 [00:00<00:06,  7.62it/s]Prediction:  12%|███▊                            | 7/58 [00:00<00:06,  7.62it/s]Prediction:  14%|████▍                           | 8/58 [00:01<00:06,  7.66it/s]Prediction:  16%|████▉                           | 9/58 [00:01<00:06,  7.66it/s]Prediction:  17%|█████▎                         | 10/58 [00:01<00:06,  7.64it/s]Prediction:  19%|█████▉                         | 11/58 [00:01<00:06,  7.63it/s]Prediction:  21%|██████▍                        | 12/58 [00:01<00:06,  7.63it/s]Prediction:  22%|██████▉                        | 13/58 [00:01<00:05,  7.63it/s]Prediction:  24%|███████▍                       | 14/58 [00:01<00:05,  7.65it/s]Prediction:  26%|████████                       | 15/58 [00:01<00:05,  7.65it/s]Prediction:  28%|████████▌                      | 16/58 [00:02<00:05,  7.63it/s]Prediction:  29%|█████████                      | 17/58 [00:02<00:05,  7.62it/s]Prediction:  31%|█████████▌                     | 18/58 [00:02<00:05,  7.62it/s]Prediction:  33%|██████████▏                    | 19/58 [00:02<00:05,  7.62it/s]Prediction:  34%|██████████▋                    | 20/58 [00:02<00:04,  7.60it/s]Prediction:  36%|███████████▏                   | 21/58 [00:02<00:04,  7.61it/s]Prediction:  38%|███████████▊                   | 22/58 [00:02<00:04,  7.64it/s]Prediction:  40%|████████████▎                  | 23/58 [00:03<00:04,  7.64it/s]Prediction:  41%|████████████▊                  | 24/58 [00:03<00:04,  7.61it/s]Prediction:  43%|█████████████▎                 | 25/58 [00:03<00:04,  7.62it/s]Prediction:  45%|█████████████▉                 | 26/58 [00:03<00:04,  7.65it/s]Prediction:  47%|██████████████▍                | 27/58 [00:03<00:04,  7.65it/s]Prediction:  48%|██████████████▉                | 28/58 [00:03<00:03,  7.65it/s]Prediction:  50%|███████████████▌               | 29/58 [00:03<00:03,  7.64it/s]Prediction:  52%|████████████████               | 30/58 [00:03<00:03,  7.65it/s]Prediction:  53%|████████████████▌              | 31/58 [00:04<00:03,  7.65it/s]Prediction:  55%|█████████████████              | 32/58 [00:04<00:03,  7.66it/s]Prediction:  57%|█████████████████▋             | 33/58 [00:04<00:03,  7.65it/s]Prediction:  59%|██████████████████▏            | 34/58 [00:04<00:03,  7.62it/s]Prediction:  60%|██████████████████▋            | 35/58 [00:04<00:03,  7.63it/s]Prediction:  62%|███████████████████▏           | 36/58 [00:04<00:02,  7.65it/s]Prediction:  64%|███████████████████▊           | 37/58 [00:04<00:02,  7.64it/s]Prediction:  66%|████████████████████▎          | 38/58 [00:04<00:02,  7.61it/s]Prediction:  67%|████████████████████▊          | 39/58 [00:05<00:02,  7.62it/s]Prediction:  69%|█████████████████████▍         | 40/58 [00:05<00:02,  7.65it/s]Prediction:  71%|█████████████████████▉         | 41/58 [00:05<00:02,  7.64it/s]Prediction:  72%|██████████████████████▍        | 42/58 [00:05<00:02,  7.62it/s]Prediction:  74%|██████████████████████▉        | 43/58 [00:05<00:01,  7.62it/s]Prediction:  76%|███████████████████████▌       | 44/58 [00:05<00:01,  7.67it/s]Prediction:  78%|████████████████████████       | 45/58 [00:05<00:01,  7.65it/s]Prediction:  79%|████████████████████████▌      | 46/58 [00:06<00:01,  7.63it/s]Prediction:  81%|█████████████████████████      | 47/58 [00:06<00:01,  7.62it/s]Prediction:  83%|█████████████████████████▋     | 48/58 [00:06<00:01,  7.63it/s]Prediction:  84%|██████████████████████████▏    | 49/58 [00:06<00:01,  7.63it/s]Prediction:  86%|██████████████████████████▋    | 50/58 [00:06<00:01,  7.62it/s]Prediction:  88%|███████████████████████████▎   | 51/58 [00:06<00:00,  7.62it/s]Prediction:  90%|███████████████████████████▊   | 52/58 [00:06<00:00,  7.60it/s]Prediction:  91%|████████████████████████████▎  | 53/58 [00:06<00:00,  7.60it/s]Prediction:  93%|████████████████████████████▊  | 54/58 [00:07<00:00,  7.60it/s]Prediction:  95%|█████████████████████████████▍ | 55/58 [00:07<00:00,  7.61it/s]Prediction:  97%|█████████████████████████████▉ | 56/58 [00:07<00:00,  7.62it/s]Prediction:  98%|██████████████████████████████▍| 57/58 [00:07<00:00,  7.62it/s]Prediction: 100%|███████████████████████████████| 58/58 [00:07<00:00,  7.71it/s]
-04/12/2021 07:10:25 - INFO - src.mtl_trainer -   ***** Test results D0 *****
-04/12/2021 07:10:25 - INFO - src.mtl_trainer -   D1
-04/12/2021 07:10:25 - INFO - transformers.trainer -   ***** Running Prediction *****
-04/12/2021 07:10:25 - INFO - transformers.trainer -     Num examples = 1872
-04/12/2021 07:10:25 - INFO - transformers.trainer -     Batch size = 32
-Prediction:   0%|                                        | 0/59 [00:00<?, ?it/s]Prediction:   2%|▌                               | 1/59 [00:00<00:07,  7.74it/s]Prediction:   3%|█                               | 2/59 [00:00<00:07,  7.71it/s]Prediction:   5%|█▋                              | 3/59 [00:00<00:07,  7.67it/s]Prediction:   7%|██▏                             | 4/59 [00:00<00:07,  7.65it/s]Prediction:   8%|██▋                             | 5/59 [00:00<00:07,  7.62it/s]Prediction:  10%|███▎                            | 6/59 [00:00<00:06,  7.62it/s]Prediction:  12%|███▊                            | 7/59 [00:00<00:06,  7.63it/s]Prediction:  14%|████▎                           | 8/59 [00:01<00:06,  7.63it/s]Prediction:  15%|████▉                           | 9/59 [00:01<00:06,  7.65it/s]Prediction:  17%|█████▎                         | 10/59 [00:01<00:06,  7.64it/s]Prediction:  19%|█████▊                         | 11/59 [00:01<00:06,  7.66it/s]Prediction:  20%|██████▎                        | 12/59 [00:01<00:06,  7.64it/s]Prediction:  22%|██████▊                        | 13/59 [00:01<00:06,  7.62it/s]Prediction:  24%|███████▎                       | 14/59 [00:01<00:05,  7.64it/s]Prediction:  25%|███████▉                       | 15/59 [00:01<00:05,  7.64it/s]Prediction:  27%|████████▍                      | 16/59 [00:02<00:05,  7.64it/s]Prediction:  29%|████████▉                      | 17/59 [00:02<00:05,  7.64it/s]Prediction:  31%|█████████▍                     | 18/59 [00:02<00:05,  7.64it/s]Prediction:  32%|█████████▉                     | 19/59 [00:02<00:05,  7.63it/s]Prediction:  34%|██████████▌                    | 20/59 [00:02<00:05,  7.62it/s]Prediction:  36%|███████████                    | 21/59 [00:02<00:04,  7.62it/s]Prediction:  37%|███████████▌                   | 22/59 [00:02<00:04,  7.63it/s]Prediction:  39%|████████████                   | 23/59 [00:03<00:04,  7.64it/s]Prediction:  41%|████████████▌                  | 24/59 [00:03<00:04,  7.63it/s]Prediction:  42%|█████████████▏                 | 25/59 [00:03<00:04,  7.63it/s]Prediction:  44%|█████████████▋                 | 26/59 [00:03<00:04,  7.62it/s]Prediction:  46%|██████████████▏                | 27/59 [00:03<00:04,  7.67it/s]Prediction:  47%|██████████████▋                | 28/59 [00:03<00:04,  7.66it/s]Prediction:  49%|███████████████▏               | 29/59 [00:03<00:03,  7.67it/s]Prediction:  51%|███████████████▊               | 30/59 [00:03<00:03,  7.66it/s]Prediction:  53%|████████████████▎              | 31/59 [00:04<00:03,  7.65it/s]Prediction:  54%|████████████████▊              | 32/59 [00:04<00:03,  7.64it/s]Prediction:  56%|█████████████████▎             | 33/59 [00:04<00:03,  7.63it/s]Prediction:  58%|█████████████████▊             | 34/59 [00:04<00:03,  7.61it/s]Prediction:  59%|██████████████████▍            | 35/59 [00:04<00:03,  7.62it/s]Prediction:  61%|██████████████████▉            | 36/59 [00:04<00:03,  7.62it/s]Prediction:  63%|███████████████████▍           | 37/59 [00:04<00:02,  7.60it/s]Prediction:  64%|███████████████████▉           | 38/59 [00:04<00:02,  7.60it/s]Prediction:  66%|████████████████████▍          | 39/59 [00:05<00:02,  7.63it/s]Prediction:  68%|█████████████████████          | 40/59 [00:05<00:02,  7.63it/s]Prediction:  69%|█████████████████████▌         | 41/59 [00:05<00:02,  7.61it/s]Prediction:  71%|██████████████████████         | 42/59 [00:05<00:02,  7.62it/s]Prediction:  73%|██████████████████████▌        | 43/59 [00:05<00:02,  7.64it/s]Prediction:  75%|███████████████████████        | 44/59 [00:05<00:01,  7.64it/s]Prediction:  76%|███████████████████████▋       | 45/59 [00:05<00:01,  7.65it/s]Prediction:  78%|████████████████████████▏      | 46/59 [00:06<00:01,  7.65it/s]Prediction:  80%|████████████████████████▋      | 47/59 [00:06<00:01,  7.65it/s]Prediction:  81%|█████████████████████████▏     | 48/59 [00:06<00:01,  7.64it/s]Prediction:  83%|█████████████████████████▋     | 49/59 [00:06<00:01,  7.63it/s]Prediction:  85%|██████████████████████████▎    | 50/59 [00:06<00:01,  7.63it/s]Prediction:  86%|██████████████████████████▊    | 51/59 [00:06<00:01,  7.62it/s]Prediction:  88%|███████████████████████████▎   | 52/59 [00:06<00:00,  7.62it/s]Prediction:  90%|███████████████████████████▊   | 53/59 [00:06<00:00,  7.62it/s]Prediction:  92%|████████████████████████████▎  | 54/59 [00:07<00:00,  7.62it/s]Prediction:  93%|████████████████████████████▉  | 55/59 [00:07<00:00,  7.59it/s]Prediction:  95%|█████████████████████████████▍ | 56/59 [00:07<00:00,  7.60it/s]Prediction:  97%|█████████████████████████████▉ | 57/59 [00:07<00:00,  7.63it/s]Prediction:  98%|██████████████████████████████▍| 58/59 [00:07<00:00,  7.63it/s]Prediction: 100%|███████████████████████████████| 59/59 [00:07<00:00,  7.69it/s]
-04/12/2021 07:10:33 - INFO - src.mtl_trainer -   ***** Test results D1 *****
-
-{"eval_loss": 3.667119571140834, "eval_matthews_corrcoef": 0.0, "eval_acc": 0.1266891891891892, "eval_f1_micro": 0.1266891891891892, "eval_f1_weighted": 0.02849082215648932, "eval_acc_and_f1_weighted": 0.07759000567283926, "epoch": 7.0, "step": 28}
-{"eval_loss": 5.5155757017302935, "eval_matthews_corrcoef": 0.0, "eval_acc": 0.007170435741864313, "eval_f1_micro": 0.007170435741864313, "eval_f1_weighted": 0.00010209820881077336, "eval_acc_and_f1_weighted": 0.0036362669753375433, "epoch": 7.0, "step": 28}
-wandb: Waiting for W&B process to finish, PID 2474
-wandb: Program ended successfully.
-wandb: - 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb: \ 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb: | 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb: / 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb: - 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb: \ 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb: | 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb: / 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb: - 0.02MB of 0.02MB uploaded (0.00MB deduped)wandb:                                                                                
-wandb: Find user logs for this run at: /home/datasci/CA-MTL/wandb/run-20210412_070953-2nzy21qj/logs/debug.log
-wandb: Find internal logs for this run at: /home/datasci/CA-MTL/wandb/run-20210412_070953-2nzy21qj/logs/debug-internal.log
-wandb: Run summary:
-wandb:                  eval_loss 5.51558
-wandb:     eval_matthews_corrcoef 0.0
-wandb:                   eval_acc 0.00717
-wandb:              eval_f1_micro 0.00717
-wandb:           eval_f1_weighted 0.0001
-wandb:   eval_acc_and_f1_weighted 0.00364
-wandb:                      epoch 7.0
-wandb:                   _runtime 40
-wandb:                 _timestamp 1618236633
-wandb:                      _step 28
-wandb: Run history:
-wandb:                  eval_loss ▁
-wandb:     eval_matthews_corrcoef ▁
-wandb:                   eval_acc ▁
-wandb:              eval_f1_micro ▁
-wandb:           eval_f1_weighted ▁
-wandb:   eval_acc_and_f1_weighted ▁
-wandb:                      epoch ▁
-wandb:                   _runtime ▁
-wandb:                 _timestamp ▁
-wandb:                      _step ▁
-wandb: 
-wandb: Synced 5 W&B file(s), 1 media file(s), 0 artifact file(s) and 0 other file(s)
-wandb: 
-wandb: Synced solar-night-10: https://wandb.ai/heatxg/huggingface/runs/2nzy21qj
-
