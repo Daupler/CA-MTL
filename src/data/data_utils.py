@@ -159,6 +159,8 @@ def task_compute_metrics(task_name, preds, labels):
         return matthews_acc_and_f1(preds, labels)
     elif task_name == "Sentiment":
         return matthews_acc_and_f1(preds, labels)
+        elif task_name == "D2":
+        return matthews_acc_and_f1(preds, labels)
     else:
         raise KeyError(task_name)
             
