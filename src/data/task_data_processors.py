@@ -202,6 +202,12 @@ task_processors = {
     "D1": D1Processor,
     "Sentiment": SentimentProcessor,
     "D2": D2Processor,
+    'MANC': D2Processor,
+    'LOC': D2Processor,
+    'HAZ': D2Processor,
+    'SIGNT': D2Processor,
+    'GTAG': D2Processor,
+    'VEH': D2Processor,
 }
 
 task_output_modes = {
@@ -209,11 +215,23 @@ task_output_modes = {
     "D1": "classification",
     "Sentiment": "classification",
     "D2": "classification",
+    'MANC': "classification",
+    'LOC': "classification",
+    'HAZ': "classification",
+    'SIGNT': "classification",
+    'GTAG': "classification",
+    'VEH': "classification",
 }
 
 tasks_num_labels = {
     "D0": 17,
     "D1": 114,
     "Sentiment": 0,
-    "D2": 50
+    "D2": 50,
+    'MANC': 9,
+    'LOC': 25,
+    'HAZ': 2,
+    'SIGNT': 12,
+    'GTAG': 1,
+    'VEH': 1,
 }
