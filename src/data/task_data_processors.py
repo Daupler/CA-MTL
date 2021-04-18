@@ -220,7 +220,7 @@ task_output_modes = {
     'HAZ': "classification",
     'SIGNT': "classification",
     'GTAG': "classification",
-    'VEH': "classification",
+    'VEHT': "classification",
 }
 
 tasks_num_labels = {
@@ -233,5 +233,5 @@ tasks_num_labels = {
     'HAZ': 2,
     'SIGNT': 12,
     'GTAG': 1,
-    'VEH': 1,
+    'VEHT': 1,
 }
