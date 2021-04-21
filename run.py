@@ -8,9 +8,11 @@ import torch
 from transformers import (
     HfArgumentParser,
     set_seed,
-    AutoTokenizer,
-    AutoConfig,
+#     AutoTokenizer,
+#     AutoConfig,
     EvalPrediction,
+    BertConfig, 
+    BertTokenizer
 )
 
 from src.model.ca_mtl import CaMtl, CaMtlArguments
@@ -62,18 +64,12 @@ def parse_cmd_args():
 
     return model_args, data_args, training_args
 
-
 def create_eval_datasets(mode, data_args, tokenizer):
     eval_datasets = {}
     for task_id, task_name in enumerate(data_args.tasks):
         eval_datasets[task_name] = TaskDataset(
             task_name, task_id, data_args, tokenizer, mode=mode
         )
-        if task_name == "mnli":
-            # Loop to handle MNLI double evaluation (matched, mis-matched)
-            eval_datasets["mnli-mm"] = TaskDataset(
-                "mnli-mm", task_id, data_args, tokenizer, mode=mode
-            )
 
     return eval_datasets
 
@@ -85,7 +81,7 @@ def main():
 
     set_seed(training_args.seed)
 
-    config = AutoConfig.from_pretrained(
+    config = BertConfig.from_pretrained(
         CaMtl.get_base_model(model_args.model_name_or_path),
     )
 
@@ -97,7 +93,7 @@ def main():
 
     logger.info(model)
 
-    tokenizer = AutoTokenizer.from_pretrained(
+    tokenizer = BertTokenizer.from_pretrained(
         CaMtl.get_base_model(model_args.model_name_or_path),
     )
 
@@ -108,13 +104,13 @@ def main():
         data_args,
         model=model,
         args=training_args,
-        train_dataset=MultiTaskDataset(data_args, tokenizer, limit_length=50)
+        train_dataset=MultiTaskDataset(data_args, tokenizer, limit_length=None)
         if training_args.do_train
         else None,
-        eval_datasets=create_eval_datasets(Split.dev, data_args, tokenizer)
+        eval_datasets=create_eval_datasets(Split.train_dev, data_args, tokenizer)
         if training_args.do_eval or training_args.evaluate_during_training
         else None,
-        test_datasets=create_eval_datasets(Split.test, data_args, tokenizer)
+        test_datasets=create_eval_datasets(Split.dev, data_args, tokenizer)
         if training_args.do_predict
         else None,
     )

@@ -1,14 +1,14 @@
 import torch
 import numpy
 from scipy.stats import entropy
-from transformers import glue_tasks_num_labels
 from torch.nn import MSELoss, CrossEntropyLoss, Softmax, Dropout, Linear, Softmax
 
+from src.data.task_data_processors import tasks_num_labels
 
 class Decoder(torch.nn.Module):
     def __init__(self, hidden_size, task_name):
         super().__init__()
-        self.num_labels = glue_tasks_num_labels[task_name]
+        self.num_labels = tasks_num_labels[task_name]
         self.dropout = Dropout(0.1)
         self.model = Linear(hidden_size, self.num_labels)
 

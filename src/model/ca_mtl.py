@@ -132,6 +132,10 @@ class CaMtl(BertPreTrainedModel):
             return CaMtlLargeEncoder(self.config, data_args=self.data_args)
         elif model_name_or_path == "CA-MTL-base":
             return CaMtlBaseEncoder(self.config, data_args=self.data_args)
+        elif model_name_or_path == "CA-MTL-base-uncased":
+            return CaMtlBaseEncoder(self.config, data_args=self.data_args)
+        elif model_name_or_path == "CA-MTL-tiny":
+            return CaMtlBaseEncoder(self.config, data_args=self.data_args)
         else:
             return _BertEncoder(self.config)
 
@@ -141,5 +145,9 @@ class CaMtl(BertPreTrainedModel):
             return "bert-large-cased"
         elif model_name_or_path == "CA-MTL-base":
             return "bert-base-cased"
+        elif model_name_or_path == "CA-MTL-base-uncased":
+            return "bert-base-uncased"
+        elif model_name_or_path == "CA-MTL-tiny":
+            return 'huawei-noah/TinyBERT_General_6L_768D'
         else:
             return model_name_or_path

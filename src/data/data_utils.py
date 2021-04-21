@@ -9,38 +9,22 @@ import torch
 from transformers import (
     InputExample,
     PreTrainedTokenizer,
-    glue_processors,
-    glue_output_modes,
-    glue_compute_metrics,
-    RobertaTokenizer,
-    RobertaTokenizerFast,
-    XLMRobertaTokenizer,
 )
-
+from .task_data_processors import (
+    task_processors,
+    task_output_modes
+)
 from src.utils.misc import MultiTaskInputFeatures, Split
+from sklearn.metrics import matthews_corrcoef, f1_score
 
 logger = logging.getLogger(__name__)
-
-
-glue_data_folder = {
-    "cola": "CoLA",
-    "mnli": "MNLI",
-    "mnli-mm": "MNLI",
-    "mrpc": "MRPC",
-    "sst-2": "SST-2",
-    "sts-b": "STS-B",
-    "qqp": "QQP",
-    "qnli": "QNLI",
-    "rte": "RTE",
-    "wnli": "WNLI",
-}
-
-
-def convert_glue_examples_to_multi_task_features(
+ 
+def convert_examples_to_multi_task_features(
     examples: List[InputExample],
     tokenizer: PreTrainedTokenizer,
     task_name,
     task_id,
+    task_data_dir,
     max_length: Optional[int] = None,
     label_list=None,
     output_mode=None,
@@ -48,12 +32,12 @@ def convert_glue_examples_to_multi_task_features(
     if max_length is None:
         max_length = tokenizer.max_len
 
-    processor = glue_processors[task_name]()
+    processor = task_processors[task_name]()
     if label_list is None:
-        label_list = processor.get_labels()
+        label_list = processor.get_labels(task_data_dir)
         logger.info("Using label list %s for task %s" % (label_list, task_name))
     if output_mode is None:
-        output_mode = glue_output_modes[task_name]
+        output_mode = task_output_modes[task_name]
         logger.info("Using output mode %s for task %s" % (output_mode, task_name))
 
     label_map = {label: i for i, label in enumerate(label_list)}
@@ -78,10 +62,7 @@ def convert_glue_examples_to_multi_task_features(
     features = []
     for i in range(len(examples)):
         inputs = {k: batch_encoding[k][i] for k in batch_encoding}
-
-        if task_name.lower() == "mnli-mm":
-            task_name = "mnli"
-
+        
         feature = MultiTaskInputFeatures(
             **inputs,
             label=labels[i],
@@ -97,11 +78,11 @@ def convert_glue_examples_to_multi_task_features(
     return features
 
 
-def load_glue_task_features(task_name, task_id, args, tokenizer, mode, limit_length):
-    processor = glue_processors[task_name]()
+def load_task_features(task_name, task_id, args, tokenizer, mode, limit_length):
+    processor = task_processors[task_name]()
 
     # Load data features from cache or dataset file
-    task_data_dir = os.path.join(args.data_dir, glue_data_folder[task_name.lower()])
+    task_data_dir = os.path.join(args.data_dir, args.task_data_folders[task_id])
     cached_features_file = os.path.join(
         task_data_dir,
         "cached_{}_{}_{}_{}".format(
@@ -111,15 +92,8 @@ def load_glue_task_features(task_name, task_id, args, tokenizer, mode, limit_len
             task_name,
         ),
     )
-
-    label_list = processor.get_labels()
-    if task_name in ["mnli", "mnli-mm"] and tokenizer.__class__ in (
-        RobertaTokenizer,
-        RobertaTokenizerFast,
-        XLMRobertaTokenizer,
-    ):
-        # HACK(label indices are swapped in RoBERTa pretrained model)
-        label_list[1], label_list[2] = label_list[2], label_list[1]
+    
+    label_list = processor.get_labels(task_data_dir)
 
     # Make sure only the first process in distributed training processes the dataset,
     # and the others will use the cache.
@@ -136,7 +110,9 @@ def load_glue_task_features(task_name, task_id, args, tokenizer, mode, limit_len
         else:
             logger.info(f"Creating features from dataset file at {task_data_dir}")
 
-            if mode == Split.dev:
+            if mode == Split.train_dev:
+                examples = processor.get_train_dev_examples(task_data_dir)
+            elif mode == Split.dev:
                 examples = processor.get_dev_examples(task_data_dir)
             elif mode == Split.test:
                 examples = processor.get_test_examples(task_data_dir)
@@ -145,14 +121,15 @@ def load_glue_task_features(task_name, task_id, args, tokenizer, mode, limit_len
             if limit_length is not None:
                 examples = examples[:limit_length]
 
-            features = convert_glue_examples_to_multi_task_features(
+            features = convert_examples_to_multi_task_features(
                 examples,
                 tokenizer,
                 task_name,
                 task_id,
+                task_data_dir,
                 max_length=args.max_seq_length,
                 label_list=label_list,
-                output_mode=glue_output_modes[task_name],
+                output_mode=task_output_modes[task_name],
             )
             start = time.time()
             torch.save(features, cached_features_file)
@@ -164,12 +141,34 @@ def load_glue_task_features(task_name, task_id, args, tokenizer, mode, limit_len
 
     return features, label_list
 
+def matthews_acc_and_f1(preds, labels):
+    matthews = matthews_corrcoef(labels, preds)
+    f1_micro = f1_score(y_true=labels, y_pred=preds, average = "micro")
+    f1_weighted = f1_score(y_true=labels, y_pred=preds, average = "weighted")
+    return {
+        "matthews_corrcoef": matthews,
+        "f1_micro": f1_micro,
+        "f1_weighted": f1_weighted,
+    }
 
-def compute_glue_metrics(task_name, p):
-    output_mode = glue_output_modes[task_name]
+def task_compute_metrics(task_name, preds, labels):
+    assert len(preds) == len(labels)
+    if task_name == "D0":
+        return matthews_acc_and_f1(preds, labels)
+    elif task_name == "D1":
+        return matthews_acc_and_f1(preds, labels)
+    elif task_name == "Sentiment":
+        return matthews_acc_and_f1(preds, labels)
+    elif task_name in ["D2", 'MANC', 'LOC', 'HAZ', 'SIGNT', 'GTAG', 'VEHT']:
+        return matthews_acc_and_f1(preds, labels)
+    else:
+        raise KeyError(task_name)
+            
+def compute_task_metrics(task_name, p):
+    output_mode = task_output_modes[task_name]
 
     if output_mode == "classification":
         preds = np.argmax(p.predictions, axis=1)
     elif output_mode == "regression":
         preds = np.squeeze(p.predictions)
-    return glue_compute_metrics(task_name, preds, p.label_ids)
+    return task_compute_metrics(task_name, preds, p.label_ids)

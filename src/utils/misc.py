@@ -7,6 +7,7 @@ from transformers import InputFeatures
 
 class Split(Enum):
     train = "train"
+    train_dev = "train_dev"
     dev = "dev"
     test = "test"
 
@@ -23,14 +24,21 @@ class MultiTaskDataArguments:
     """
 
     data_dir: str = field(
+        default=None,
         metadata={
-            "help": "The input data dir. Should contain the .tsv files (or other data files) for the task."
+            "help": "The input data dir. Should contain the task folders references in task_data_folders"
         }
     )
     tasks: List[str] = field(
         default=None,
         metadata={
-            "help": "The task file that contains the tasks to train on. If None all tasks will be used"
+            "help": "The task file that contains the tasks to train on. Must be provided"
+        },
+    )
+    task_data_folders: List[str] = field(
+        default=None,
+        metadata={
+            "help": "The task folders that contain the data for the tasks to train on. Should contain .tsv files for each split for the task. Must be provided"
         },
     )
     overwrite_cache: bool = field(
@@ -38,22 +46,10 @@ class MultiTaskDataArguments:
         metadata={"help": "Overwrite the cached training and evaluation sets"},
     )
     max_seq_length: int = field(
-        default=128,
+        default=256,
         metadata={
             "help": "The maximum total input sequence length after tokenization. Sequences longer "
             "than this will be truncated, sequences shorter will be padded."
         },
     )
 
-    def __post_init__(self):
-        if self.tasks is None:
-            self.tasks = [
-                "cola",
-                "mnli",
-                "rte",
-                "wnli",
-                "qqp",
-                "sts-b",
-                "sst-2",
-                "qnli",
-            ]
