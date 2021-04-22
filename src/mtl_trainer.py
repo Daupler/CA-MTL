@@ -281,7 +281,7 @@ class MultiTaskTrainer(Trainer):
                     if output_mode == "regression":
                         writer.write("index\tprediction\n")
                     else:
-                        writer.write("index\tprediction\tprobability\tlogits\n")
+                        writer.write("index\tscoring_model\tprediction\tprobability\tlogits\n")
                     for index, item in enumerate(predictions):
                         if output_mode == "regression":
                             writer.write("%d\t%3.3f\n" % (index, item))
