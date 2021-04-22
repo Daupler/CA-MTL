@@ -244,6 +244,7 @@ class MultiTaskTrainer(Trainer):
         self,
         eval_dataset: Optional[Dataset] = None,
         prediction_loss_only: Optional[bool] = None,
+        scoring_model: Optional[str] = None
     ):
         logging.info("*** Test ***")
         datasets = eval_dataset or self.test_datasets
@@ -271,6 +272,8 @@ class MultiTaskTrainer(Trainer):
                 self.args.output_dir,
                 f"{task_name}_test_iter_{self.run_name}.tsv",
             )
+            if scoring_model is None:
+                scoring_model = self.run_name
             if self.is_world_master():
                 with open(output_test_file, "w") as writer:
                     logger.info("***** Test results {} *****".format(task_name))
@@ -287,8 +290,9 @@ class MultiTaskTrainer(Trainer):
                             i_logits = logits[index,:]
                             i_logits = json.dumps(dict(zip(test_dataset.get_labels(), i_logits)))
                             writer.write(
-                                "%d\t%s\t%3.3f\t%s\n" % (
-                                    index, test_dataset.get_labels()[item], i_probs[item], i_logits)
+                                "%d\t%s\t%s\t%3.6f\t%s\n" % (
+                                    index, scoring_model, test_dataset.get_labels()[item], 
+                                    i_probs[item], i_logits)
                             )
                             
     def _prediction_loop(
