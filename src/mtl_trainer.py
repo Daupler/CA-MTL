@@ -259,6 +259,8 @@ class MultiTaskTrainer(Trainer):
             for key, value in test_result.metrics.items():
                 logger.info("  %s = %s", key, value)
                 
+            softmax = torch.nn.Softmax(dim=1)
+            probs = softmax(torch.Tensor(test_result.predictions)).numpy().astype('float64')
             logits = test_result.predictions.astype('float64')
             output_mode = task_output_modes[task_name] 
             if output_mode == "classification":
@@ -276,15 +278,17 @@ class MultiTaskTrainer(Trainer):
                     if output_mode == "regression":
                         writer.write("index\tprediction\n")
                     else:
-                        writer.write("index\tprediction\tlogits\n")
+                        writer.write("index\tprediction\tprobability\tlogits\n")
                     for index, item in enumerate(predictions):
                         if output_mode == "regression":
                             writer.write("%d\t%3.3f\n" % (index, item))
                         else:
+                            i_probs = probs[index,:]
                             i_logits = logits[index,:]
                             i_logits = json.dumps(dict(zip(test_dataset.get_labels(), i_logits)))
                             writer.write(
-                                "%d\t%s\t%s\n" % (index, test_dataset.get_labels()[item], i_logits)
+                                "%d\t%s\t%3.3f\t%s\n" % (
+                                    index, test_dataset.get_labels()[item], i_probs[item], i_logits)
                             )
                             
     def _prediction_loop(
