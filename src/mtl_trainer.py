@@ -1,4 +1,5 @@
 import os
+import json
 import logging
 from dataclasses import dataclass, field
 from typing import Dict, Optional, Callable
@@ -258,27 +259,32 @@ class MultiTaskTrainer(Trainer):
             for key, value in test_result.metrics.items():
                 logger.info("  %s = %s", key, value)
                 
-            predictions = test_result.predictions
+            logits = test_result.predictions.astype('float64')
             output_mode = task_output_modes[task_name] 
             if output_mode == "classification":
-                predictions = np.argmax(predictions, axis=1)
-
-            run_name = wandb.run.name
+                predictions = np.argmax(logits, axis=1)
+            
+            self.run_name = wandb.run.name
             output_test_file = os.path.join(
                 self.args.output_dir,
-                f"{task_name}_test_iter_{run_name}.tsv",
+                f"{task_name}_test_iter_{self.run_name}.tsv",
             )
             if self.is_world_master():
                 with open(output_test_file, "w") as writer:
                     logger.info("***** Test results {} *****".format(task_name))
-                    logger.info("***** Writing as {} *****".format(run_name))
-                    writer.write("index\tprediction\n")
+                    logger.info("***** Writing as {} *****".format(self.run_name))
+                    if output_mode == "regression":
+                        writer.write("index\tprediction\n")
+                    else:
+                        writer.write("index\tprediction\tlogits\n")
                     for index, item in enumerate(predictions):
                         if output_mode == "regression":
                             writer.write("%d\t%3.3f\n" % (index, item))
                         else:
+                            i_logits = logits[index,:]
+                            i_logits = json.dumps(dict(zip(test_dataset.get_labels(), i_logits)))
                             writer.write(
-                                "%d\t%s\n" % (index, test_dataset.get_labels()[item])
+                                "%d\t%s\t%s\n" % (index, test_dataset.get_labels()[item], i_logits)
                             )
                             
     def _prediction_loop(
@@ -368,7 +374,7 @@ class MultiTaskTrainer(Trainer):
         if len(eval_losses) > 0:
             metrics[f"{task_name}_{mode}_loss"] = np.mean(eval_losses)
 
-        # Prefix all keys with {task_name}_eval_
+        # Prefix all keys with {task_name}_{model}_
         for key in list(metrics.keys()):
             if not key.startswith(f"{task_name}_{mode}_"):
                 metrics[f"{task_name}_{mode}_{key}"] = metrics.pop(key)
