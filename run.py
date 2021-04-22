@@ -104,7 +104,7 @@ def main():
         data_args,
         model=model,
         args=training_args,
-        train_dataset=MultiTaskDataset(data_args, tokenizer, limit_length=150)
+        train_dataset=MultiTaskDataset(data_args, tokenizer, limit_length=None)
         if training_args.do_train
         else None,
         eval_datasets=create_eval_datasets(Split.train_dev, data_args, tokenizer)
