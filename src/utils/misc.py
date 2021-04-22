@@ -10,7 +10,6 @@ class Split(Enum):
     train_dev = "train_dev"
     dev = "dev"
     test = "test"
-    score = "score"
 
 
 @dataclass(frozen=True)
