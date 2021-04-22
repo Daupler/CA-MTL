@@ -78,7 +78,7 @@ def convert_examples_to_multi_task_features(
     return features
 
 
-def load_task_features(task_name, task_id, args, tokenizer, mode, limit_length):
+def load_task_features(task_name, task_id, args, tokenizer, mode, limit_length, label_list=None):
     processor = task_processors[task_name]()
 
     # Load data features from cache or dataset file
@@ -93,7 +93,8 @@ def load_task_features(task_name, task_id, args, tokenizer, mode, limit_length):
         ),
     )
     
-    label_list = processor.get_labels(task_data_dir)
+    if label_list is None:
+        label_list = processor.get_labels(task_data_dir)
 
     # Make sure only the first process in distributed training processes the dataset,
     # and the others will use the cache.
