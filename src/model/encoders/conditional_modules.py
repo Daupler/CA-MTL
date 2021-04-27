@@ -54,8 +54,10 @@ class CBDA(nn.Module):
         out = (1 + gamma) * x_to_film + beta
         if self.layer_norm is not None:
             out = self.layer_norm(out)
-        out = [torch.block_diag(*list(out_b.chunk(self.blocks, 0))) for out_b in out]
-        out = torch.stack(out)
+        diag_out = []
+        for out_b in out:
+            diag_out.append(torch.block_diag(out_b.chunk(self.blocks, 0)))
+        out = torch.stack(diag_out)
         return out[:, :, :out.size(1)]
 
 
