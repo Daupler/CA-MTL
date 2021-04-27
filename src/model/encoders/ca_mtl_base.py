@@ -57,7 +57,7 @@ class MyBertSelfAttention9(nn.Module):
             self.num_attention_heads,
             self.attention_head_size,
         )
-        x = x.view(*new_x_shape)
+        x = x.view(new_x_shape)
         return x.permute(0, 2, 1, 3)
 
     def forward(
