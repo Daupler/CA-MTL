@@ -62,12 +62,12 @@ class MyBertSelfAttention9(nn.Module):
 
     def forward(
         self,
-        hidden_states,
-        attention_mask=None,
-        head_mask=None,
-        encoder_hidden_states=None,
-        encoder_attention_mask=None,
-        task_embedding=None,
+        hidden_states: torch.Tensor,
+        task_embedding: torch.Tensor,
+        attention_mask: Optional[torch.Tensor]=None,
+        head_mask: Optional[torch.Tensor]=None,
+        encoder_hidden_states: Optional[torch.Tensor]=None,
+        encoder_attention_mask: Optional[torch.Tensor]=None,
     ):
 
         # If this is instantiated as a cross-attention module, the keys

@@ -1,5 +1,6 @@
 import torch
 import numbers
+from typing import List, Optional, Union
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -48,7 +49,7 @@ class CBDA(nn.Module):
         self.gb_weights = nn.Linear(self.input_size, film_output_size)
         self.gb_weights.bias.data.fill_(0)
 
-    def forward(self, x_cond, x_to_film):
+    def forward(self, x_cond: torch.Tensor, x_to_film: torch.Tensor):
         gb = self.gb_weights(x_cond).unsqueeze(1)
         gamma, beta = torch.chunk(gb, 2, dim=-1)
         out = (1 + gamma) * x_to_film + beta
