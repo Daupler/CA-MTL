@@ -104,10 +104,8 @@ class MyBertSelfAttention9(nn.Module):
 
         # y = ax + b(task_emb)
         # Normalize the attention scores to probabilities.
-        attention_probs = nn.Softmax(dim=-1)(
-            attention_scores
-        )  # b x num heads x seq length x head dim
-
+        attention_probs = nn.functional.softmax(attention_scores, dim=-1)
+        
         # This is actually dropping out entire tokens to attend to, which might
         # seem a bit unusual, but is taken from the original Transformer paper.
         attention_probs = self.dropout(attention_probs)
