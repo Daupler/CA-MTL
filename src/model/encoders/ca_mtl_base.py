@@ -399,20 +399,31 @@ class BertEmbeddings(nn.Module):
                 token_type_ids: torch.Tensor = torch.zeros(size=(1,0)),
                 position_ids: torch.Tensor = torch.zeros(size=(1,0)),
                 inputs_embeds: torch.Tensor = torch.zeros(size=(1,0))):
-        if not input_ids.size()[1] == 0:
+
+        input_ids_provided = not input_ids is None
+        token_type_ids_provided = not token_type_ids is None
+        position_ids_provided = not position_ids is None
+        inputs_embeds_provided = not inputs_embeds is None
+        
+#         input_ids_provided = (not input_ids.size()[1] == 0)
+#         token_type_ids_provided = (not token_type_ids.size()[1] == 0)
+#         position_ids_provided = (not position_ids.size()[1] == 0)
+#         inputs_embeds_provided = (not inputs_embeds.size()[1] == 0)
+        
+        if input_ids_provided:
             input_shape = input_ids.size()
         else:
             input_shape = inputs_embeds.size()[:-1]
 
         seq_length = input_shape[1]
         device = input_ids.device if input_ids is not None else inputs_embeds.device
-        if not position_ids.size()[1] == 0:
+        if not position_ids_provided:
             position_ids = torch.arange(seq_length, dtype=torch.long, device=device)
             position_ids = position_ids.unsqueeze(0).expand(input_shape)
-        if not token_type_ids.size()[1] == 0:
+        if not token_type_ids_provided:
             token_type_ids = torch.zeros(input_shape, dtype=torch.long, device=device)
 
-        if not inputs_embeds.size()[1] == 0:
+        if not inputs_embeds_provided:
             inputs_embeds = self.word_embeddings(input_ids)
         position_embeddings = self.position_embeddings(position_ids)
         token_type_embeddings = self.token_type_embeddings(token_type_ids)
@@ -496,14 +507,14 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
 
     def forward(
         self,
-        input_ids=None,
-        attention_mask=None,
-        token_type_ids=None,
-        position_ids=None,
-        head_mask=None,
-        inputs_embeds=None,
-        encoder_hidden_states=None,
-        encoder_attention_mask=None,
+        input_ids: torch.Tensor = torch.zeros(size=(1,0)),
+        attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        token_type_ids: torch.Tensor = torch.zeros(size=(1,0)),
+        position_ids: torch.Tensor = torch.zeros(size=(1,0)),
+        head_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        inputs_embeds: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_hidden_states: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
         task_id=None,
     ):
         """Forward pass on the Model.
@@ -517,23 +528,38 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
         """
         task_type = self._create_task_type(task_id)
         task_embedding = self.task_type_embeddings(task_type)
+        
+        input_ids_provided = not input_ids is None
+        input_embeds_provided = not inputs_embeds is None
+        attention_mask_provided = not attention_mask is None
+        token_type_ids_provided = not token_type_ids is None
+        encoder_hidden_states_provided = not encoder_hidden_states is None
+        head_mask_provided = not head_mask is None
+        encoder_attention_mask_provided = not encoder_attention_mask is None
 
-        if input_ids is not None and inputs_embeds is not None:
+#         input_ids_provided = (not input_ids.size()[1] == 0)
+#         input_embeds_provided = (not inputs_embeds.size()[1] == 0)
+#         attention_mask_provided = (not attention_mask.size()[1] == 0)
+#         token_type_ids_provided = (not token_type_ids.size()[1] == 0)
+#         encoder_hidden_states_provided = (not encoder_hidden_states.size()[1] == 0)
+#         head_mask_provided = (not head_mask.size()[1] == 0)
+        
+        if input_ids_provided and input_embeds_provided:
             raise ValueError(
                 "You cannot specify both input_ids and inputs_embeds at the same time"
             )
-        elif input_ids is not None:
+        elif input_ids_provided:
             input_shape = input_ids.size()
-        elif inputs_embeds is not None:
+        elif input_embeds_provided:
             input_shape = inputs_embeds.size()[:-1]
         else:
             raise ValueError("You have to specify either input_ids or inputs_embeds")
 
-        device = input_ids.device if input_ids is not None else inputs_embeds.device
+        device = input_ids.device if input_ids_provided else inputs_embeds.device
 
-        if attention_mask is None:
+        if not attention_mask_provided:
             attention_mask = torch.ones(input_shape, device=device)
-        if token_type_ids is None:
+        if not token_type_ids_provided:
             token_type_ids = torch.zeros(input_shape, dtype=torch.long, device=device)
 
         # We can provide a self-attention mask of dimensions [batch_size, from_seq_length, to_seq_length]
@@ -578,14 +604,14 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
 
         # If a 2D ou 3D attention mask is provided for the cross-attention
         # we need to make broadcastabe to [batch_size, num_heads, seq_length, seq_length]
-        if self.config.is_decoder and encoder_hidden_states is not None:
+        if self.config.is_decoder and encoder_hidden_states_provided:
             (
                 encoder_batch_size,
                 encoder_sequence_length,
                 _,
             ) = encoder_hidden_states.size()
             encoder_hidden_shape = (encoder_batch_size, encoder_sequence_length)
-            if encoder_attention_mask is None:
+            if not encoder_attention_mask_provided:
                 encoder_attention_mask = torch.ones(encoder_hidden_shape, device=device)
 
             if encoder_attention_mask.dim() == 3:
@@ -615,7 +641,7 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
         # attention_probs has shape bsz x n_heads x N x N
         # input head_mask has shape [num_heads] or [num_hidden_layers x num_heads]
         # and head_mask is converted to shape [num_hidden_layers x batch x num_heads x seq_length x seq_length]
-        if head_mask is not None:
+        if head_mask_provided:
             if head_mask.dim() == 1:
                 head_mask = (
                     head_mask.unsqueeze(0).unsqueeze(0).unsqueeze(-1).unsqueeze(-1)
