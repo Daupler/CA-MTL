@@ -63,11 +63,11 @@ class MyBertSelfAttention9(nn.Module):
     def forward(
         self,
         hidden_states: torch.Tensor,
-        task_embedding: torch.Tensor,
         attention_mask: Optional[torch.Tensor]=None,
         head_mask: Optional[torch.Tensor]=None,
         encoder_hidden_states: Optional[torch.Tensor]=None,
         encoder_attention_mask: Optional[torch.Tensor]=None,
+        task_embedding: torch.Tensor = torch.zeros(size=(1,0)),
     ):
 
         # If this is instantiated as a cross-attention module, the keys
@@ -302,7 +302,7 @@ class BertLayer9(BertLayer):
         encoder_hidden_states=None,
         encoder_attention_mask=None,
         task_embedding=None,
-        task_id=None
+        task_id=None,
     ):
         self_attention_outputs = self.attention(
             hidden_states, attention_mask, head_mask, task_embedding=task_embedding, task_id=task_id
@@ -354,8 +354,8 @@ class MyBertEncoder9(nn.Module):
                 head_mask[i],
                 encoder_hidden_states,
                 encoder_attention_mask,
-                task_embedding,
-                task_type
+                task_embedding=task_embedding,
+                task_id=task_type
             )
             hidden_states = layer_outputs[0]
 
