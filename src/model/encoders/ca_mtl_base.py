@@ -429,25 +429,25 @@ class BertEmbeddings(nn.Module):
         #position_ids_provided = not position_ids is None
         #inputs_embeds_provided = not inputs_embeds is None
         
-        input_ids_provided = (not input_ids.size()[1] == 0)
-        token_type_ids_provided = (not token_type_ids.size()[1] == 0)
-        position_ids_provided = (not position_ids.size()[1] == 0)
-        inputs_embeds_provided = (not inputs_embeds.size()[1] == 0)
+        input_ids_not_provided = (input_ids is None) or (input_ids.size()[1] == 0)
+        token_type_ids_not_provided = (token_type_ids is None) or (token_type_ids.size()[1] == 0)
+        position_ids_not_provided = (position_ids is None) or (position_ids.size()[1] == 0)
+        inputs_embeds_not_provided = (inputs_embeds is None) or (inputs_embeds.size()[1] == 0)
         
-        if input_ids_provided:
+        if not input_ids_not_provided:
             input_shape = input_ids.size()
         else:
             input_shape = inputs_embeds.size()[:-1]
 
         seq_length = input_shape[1]
-        device = input_ids.device if input_ids_provided else inputs_embeds.device
-        if not position_ids_provided:
+        device = input_ids.device if not input_ids_not_provided else inputs_embeds.device
+        if position_ids_not_provided:
             position_ids = torch.arange(seq_length, dtype=torch.long, device=device)
             position_ids = position_ids.unsqueeze(0).expand(input_shape)
-        if not token_type_ids_provided:
+        if token_type_ids_not_provided:
             token_type_ids = torch.zeros(input_shape, dtype=torch.long, device=device)
 
-        if not inputs_embeds_provided:
+        if inputs_embeds_not_provided:
             inputs_embeds = self.word_embeddings(input_ids)
         position_embeddings = self.position_embeddings(position_ids)
         token_type_embeddings = self.token_type_embeddings(token_type_ids)
