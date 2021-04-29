@@ -102,7 +102,7 @@ class MyBertSelfAttention9(nn.Module):
         # b x seq len x hid dim
 
         # Take the dot product between "query" and "key" to get the raw attention scores.
-        if attention_mask_provided
+        if attention_mask_provided:
             # Apply the attention mask is (precomputed for all layers in BertModel forward() function)
             attention_scores = attention_scores + attention_mask
 
@@ -287,7 +287,9 @@ class MyBertLayer9(nn.Module):
             1:
         ]  # add self attentions if we output attention weights
 
-        if self.is_decoder and encoder_hidden_states is not None:
+        encoder_hidden_states_provided = (not encoder_hidden_states.size()[1] == 0)
+        
+        if self.is_decoder and encoder_hidden_states_provided:
             cross_attention_outputs = self.crossattention(
                 attention_output,
                 attention_mask,
