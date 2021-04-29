@@ -10,7 +10,7 @@ from transformers.modeling_bert import (
     BertAttention,
     BertIntermediate,
     BertLayer,
-    BertSelfOutput,
+#     BertSelfOutput,
 )
 
 from src.model.encoders.conditional_modules import FiLM, CBDA, ConditionalBottleNeck, ConditionalLayerNorm
@@ -137,7 +137,22 @@ class MyBertSelfOutput9(nn.Module):
         hidden_states = self.LayerNorm(hidden_states + input_tensor, task_embedding, task_id)
         return hidden_states
 
+ # this module is exactly the same as the BertSelfOutput module except it takes the 
+ # task_embedding and task_id in the forward pass even though it does not use them. This is
+ # an artifact of meeting TorchScript requirements
+class MyBertSelfOutput(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
+        self.LayerNorm = BertLayerNorm(config.hidden_size, eps=config.layer_norm_eps)
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
+    def forward(self, hidden_states, input_tensor, task_embedding, task_id):
+        hidden_states = self.dense(hidden_states)
+        hidden_states = self.dropout(hidden_states)
+        hidden_states = self.LayerNorm(hidden_states + input_tensor)
+        return hidden_states    
+    
 class MyBertOutput9(nn.Module):
     def __init__(self, config):
         super().__init__()
@@ -160,7 +175,7 @@ class MyBertAttention9(BertAttention):
         if add_conditional_layernorm:
             self.output = MyBertSelfOutput9(config)
         else:
-            self.output = BertSelfOutput(config)
+            self.output = MyBertSelfOutput(config)
         self.pruned_heads = set()
 
     def forward(
@@ -181,13 +196,12 @@ class MyBertAttention9(BertAttention):
             encoder_attention_mask,
             task_embedding=task_embedding,
         )
-        if self.add_conditional_layernorm:
-            attention_output = self.output(self_outputs[0], hidden_states, task_embedding, task_id)
-        else:
-            attention_output = self.output(self_outputs[0], hidden_states)
-        outputs = (attention_output,) + self_outputs[
-            1:
-        ]  # add attentions if we output them
+        
+        attention_output = self.output(self_outputs[0], hidden_states, task_embedding, task_id)
+        outputs = (attention_output,)
+        #outputs = (attention_output,) + self_outputs[
+        #    1:
+        #]  # add attentions if we output them... we are not doing this because of TorchScript
         return outputs
 
 
