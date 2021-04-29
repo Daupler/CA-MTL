@@ -561,29 +561,29 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
         #head_mask_provided = not head_mask is None
         #encoder_attention_mask_provided = not encoder_attention_mask is None
 
-        input_ids_provided = (not input_ids is None) or (not input_ids.size()[1] == 0)
-        input_embeds_provided = (not inputs_embeds is None) or (not inputs_embeds.size()[1] == 0)
-        attention_mask_provided = (not attention_mask is None) or (not attention_mask.size()[1] == 0)
-        token_type_ids_provided = (not token_type_ids is None) or (not token_type_ids.size()[1] == 0)
-        encoder_hidden_states_provided = (not encoder_hidden_states is None) or (not encoder_hidden_states.size()[1] == 0)
-        head_mask_provided = (not head_mask is None) or (not head_mask.size()[1] == 0)
+        input_ids_not_provided = (input_ids is None) or (input_ids.size()[1] == 0)
+        input_embeds_not_provided = (inputs_embeds is None) or (inputs_embeds.size()[1] == 0)
+        attention_mask_not_provided = (attention_mask is None) or (attention_mask.size()[1] == 0)
+        token_type_ids_not_provided = (token_type_ids is None) or (token_type_ids.size()[1] == 0)
+        encoder_hidden_states_not_provided = (encoder_hidden_states is None) or (encoder_hidden_states.size()[1] == 0)
+        head_mask_not_provided = (head_mask is None) or (head_mask.size()[1] == 0)
         
-        if input_ids_provided and input_embeds_provided:
+        if not input_ids_not_provided and not input_embeds_not_provided:
             raise ValueError(
                 "You cannot specify both input_ids and inputs_embeds at the same time"
             )
-        elif input_ids_provided:
+        elif not input_ids_not_provided:
             input_shape = input_ids.size()
-        elif input_embeds_provided:
+        elif not input_embeds_not_provided:
             input_shape = inputs_embeds.size()[:-1]
         else:
             raise ValueError("You have to specify either input_ids or inputs_embeds")
 
         device = input_ids.device if input_ids_provided else inputs_embeds.device
 
-        if not attention_mask_provided:
+        if attention_mask_not_provided:
             attention_mask = torch.ones(input_shape, device=device)
-        if not token_type_ids_provided:
+        if token_type_ids_not_provided:
             token_type_ids = torch.zeros(input_shape, dtype=torch.long, device=device)
 
         # We can provide a self-attention mask of dimensions [batch_size, from_seq_length, to_seq_length]
@@ -628,7 +628,7 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
 
         # If a 2D ou 3D attention mask is provided for the cross-attention
         # we need to make broadcastabe to [batch_size, num_heads, seq_length, seq_length]
-        if self.config.is_decoder and encoder_hidden_states_provided:
+        if self.config.is_decoder and not encoder_hidden_states_not_provided:
             (
                 encoder_batch_size,
                 encoder_sequence_length,
@@ -665,7 +665,7 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
         # attention_probs has shape bsz x n_heads x N x N
         # input head_mask has shape [num_heads] or [num_hidden_layers x num_heads]
         # and head_mask is converted to shape [num_hidden_layers x batch x num_heads x seq_length x seq_length]
-        if head_mask_provided:
+        if not head_mask_not_provided:
             if head_mask.dim() == 1:
                 head_mask = (
                     head_mask.unsqueeze(0).unsqueeze(0).unsqueeze(-1).unsqueeze(-1)
