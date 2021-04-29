@@ -561,12 +561,12 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
         #head_mask_provided = not head_mask is None
         #encoder_attention_mask_provided = not encoder_attention_mask is None
 
-        input_ids_provided = (not input_ids.size()[1] == 0)
-        input_embeds_provided = (not inputs_embeds.size()[1] == 0)
-        attention_mask_provided = (not attention_mask.size()[1] == 0)
-        token_type_ids_provided = (not token_type_ids.size()[1] == 0)
-        encoder_hidden_states_provided = (not encoder_hidden_states.size()[1] == 0)
-        head_mask_provided = (not head_mask.size()[1] == 0)
+        input_ids_provided = (not input_ids is None) or (not input_ids.size()[1] == 0)
+        input_embeds_provided = (not inputs_embeds is None) or (not inputs_embeds.size()[1] == 0)
+        attention_mask_provided = (not attention_mask is None) or (not attention_mask.size()[1] == 0)
+        token_type_ids_provided = (not token_type_ids is None) or (not token_type_ids.size()[1] == 0)
+        encoder_hidden_states_provided = (not encoder_hidden_states is None) or (not encoder_hidden_states.size()[1] == 0)
+        head_mask_provided = (not head_mask is None) or (not head_mask.size()[1] == 0)
         
         if input_ids_provided and input_embeds_provided:
             raise ValueError(
