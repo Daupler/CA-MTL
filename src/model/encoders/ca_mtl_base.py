@@ -561,12 +561,18 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
         #head_mask_provided = not head_mask is None
         #encoder_attention_mask_provided = not encoder_attention_mask is None
 
-        input_ids_not_provided = (input_ids is None) or (input_ids.size()[1] == 0)
-        input_embeds_not_provided = (inputs_embeds is None) or (inputs_embeds.size()[1] == 0)
-        attention_mask_not_provided = (attention_mask is None) or (attention_mask.size()[1] == 0)
-        token_type_ids_not_provided = (token_type_ids is None) or (token_type_ids.size()[1] == 0)
-        encoder_hidden_states_not_provided = (encoder_hidden_states is None) or (encoder_hidden_states.size()[1] == 0)
-        head_mask_not_provided = (head_mask is None) or (head_mask.size()[1] == 0)
+        input_ids_not_provided = (
+            input_ids is None) or (input_ids.size()[1] == 0)
+        input_embeds_not_provided = (
+            inputs_embeds is None) or (inputs_embeds.size()[1] == 0)
+        attention_mask_not_provided = (
+            attention_mask is None) or (attention_mask.size()[1] == 0)
+        token_type_ids_not_provided = (
+            token_type_ids is None) or (token_type_ids.size()[1] == 0)
+        encoder_hidden_states_not_provided = (
+            encoder_hidden_states is None) or (encoder_hidden_states.size()[1] == 0)
+        head_mask_not_provided = (
+            head_mask is None) or (head_mask.size()[1] == 0)
         
         if not input_ids_not_provided and not input_embeds_not_provided:
             raise ValueError(
@@ -579,7 +585,7 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
         else:
             raise ValueError("You have to specify either input_ids or inputs_embeds")
 
-        device = input_ids.device if input_ids_provided else inputs_embeds.device
+        device = input_ids.device if not input_ids_not_provided else inputs_embeds.device
 
         if attention_mask_not_provided:
             attention_mask = torch.ones(input_shape, device=device)
@@ -635,7 +641,7 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
                 _,
             ) = encoder_hidden_states.size()
             encoder_hidden_shape = (encoder_batch_size, encoder_sequence_length)
-            if not encoder_attention_mask_provided:
+            if encoder_attention_mask_not_provided:
                 encoder_attention_mask = torch.ones(encoder_hidden_shape, device=device)
 
             if encoder_attention_mask.dim() == 3:
