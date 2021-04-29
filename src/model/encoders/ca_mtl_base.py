@@ -181,12 +181,12 @@ class MyBertAttention9(BertAttention):
     def forward(
         self,
         hidden_states,
-        attention_mask=None,
-        head_mask=None,
-        encoder_hidden_states=None,
-        encoder_attention_mask=None,
-        task_embedding=None,
-        task_id=None
+        attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        head_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_hidden_states: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        task_embedding: torch.Tensor = torch.zeros(size=(1,0)),
+        task_id: torch.Tensor = torch.zeros(size=(1,0)),
     ):
         self_outputs = self.self(
             hidden_states,
@@ -322,11 +322,13 @@ class BertLayer9(BertLayer):
             hidden_states, attention_mask, head_mask, task_embedding=task_embedding, task_id=task_id
         )
         attention_output = self_attention_outputs[0]
-        outputs = self_attention_outputs[1:]  # add self attentions if we output attention weights
+        # outputs = self_attention_outputs[1:]  # add self attentions if we output attention weights
+        # we are not outputting attention as an option at this point in time
 
         intermediate_output = self.intermediate(attention_output)
         layer_output = self.output(intermediate_output, attention_output)
-        outputs = (layer_output,) + outputs
+        #outputs = (layer_output,) + outputs
+        outputs = (layer_output,)
         return outputs
 
 
