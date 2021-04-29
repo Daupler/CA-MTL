@@ -63,6 +63,10 @@ def parse_cmd_args():
 
     logger.info("Training/evaluation parameters %s", training_args)
 
+    # default encoder type to model path if not provided
+    if model_args.encoder_type is None:
+        model_args.encoder_type = model_args.model_name_or_path
+        
     return model_args, data_args, training_args
 
 def create_eval_datasets(mode, data_args, tokenizer):
