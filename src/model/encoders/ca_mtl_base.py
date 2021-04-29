@@ -71,9 +71,9 @@ class MyBertSelfAttention9(nn.Module):
     ):
 
         encoder_hidden_states_not_provided = (
-            input_ids is None) or (encoder_hidden_states.size()[1] == 0)
-        attention_mask_not_provided = (input_ids is None) or (attention_mask.size()[1] == 0)
-        head_mask_not_provided = (input_ids is None) or (head_mask.size()[1] == 0)
+            encoder_hidden_states is None) or (encoder_hidden_states.size()[1] == 0)
+        attention_mask_not_provided = (attention_mask is None) or (attention_mask.size()[1] == 0)
+        head_mask_not_provided = (head_mask is None) or (head_mask.size()[1] == 0)
 
         # If this is instantiated as a cross-attention module, the keys
         # and values come from an encoder; the attention mask needs to be
@@ -370,9 +370,11 @@ class MyBertEncoder9(nn.Module):
         all_hidden_states = ()
         all_attentions = ()
         task_embedding = self.task_transformation(task_embedding)
+        
+        all_hidden_states = []
         for i, layer_module in enumerate(self.layer):
             if self.output_hidden_states:
-                all_hidden_states = all_hidden_states + (hidden_states,)
+                all_hidden_states.append(hidden_states)
 
             layer_outputs = layer_module(
                 hidden_states,
@@ -385,18 +387,21 @@ class MyBertEncoder9(nn.Module):
             )
             hidden_states = layer_outputs[0]
 
-            if self.output_attentions:
-                all_attentions = all_attentions + (layer_outputs[1],)
+            #if self.output_attentions:
+            #    all_attentions = all_attentions + (layer_outputs[1],)
 
-        # Add last layer
+        # THIS IS IMPORTANT... I AM FORCING THE MODULE TO ALWAYS RETURN ALL HIDDEN STATES 
+        # THIS IS FOR TORCHSCRIPT
         if self.output_hidden_states:
-            all_hidden_states = all_hidden_states + (hidden_states,)
-
-        outputs = (hidden_states,)
-        if self.output_hidden_states:
-            outputs = outputs + (all_hidden_states,)
-        if self.output_attentions:
-            outputs = outputs + (all_attentions,)
+            # Add last layer
+            all_hidden_states.append(hidden_states)
+            #all_hidden_states = tuple(all_hidden_states)
+            # Update outputs
+            outputs = (hidden_states, all_hidden_states)
+        else:
+            outputs = (hidden_states, all_hidden_states)
+        #if self.output_attentions:
+        #    outputs = outputs + (all_attentions,)
         return outputs  # last-layer hidden state, (all hidden states), (all attentions)
 
     
