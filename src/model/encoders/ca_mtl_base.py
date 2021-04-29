@@ -713,13 +713,13 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
     def _create_task_type(self, task_id):
         task_type = task_id.clone()
         unique_task_ids = torch.unique(task_type)
-        unique_task_ids_list = (
-            unique_task_ids.cpu().numpy()
-            if unique_task_ids.is_cuda
-            else unique_task_ids.numpy()
-        )
-        for unique_task_id in unique_task_ids_list:
-            task_type[task_type == unique_task_id] = self.task_id_2_task_idx[
-                unique_task_id
+        #unique_task_ids_list = (
+        #    unique_task_ids.cpu().numpy()
+        #    if unique_task_ids.is_cuda
+        #    else unique_task_ids.numpy()
+        #)
+        for unique_task_id in unique_task_ids:
+            task_type[task_type == int(unique_task_id)] = self.task_id_2_task_idx[
+                int(unique_task_id)
             ]
         return task_type
