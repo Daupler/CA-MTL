@@ -405,10 +405,10 @@ class BertEmbeddings(nn.Module):
         position_ids_provided = not position_ids is None
         inputs_embeds_provided = not inputs_embeds is None
         
-#         input_ids_provided = (not input_ids.size()[1] == 0)
-#         token_type_ids_provided = (not token_type_ids.size()[1] == 0)
-#         position_ids_provided = (not position_ids.size()[1] == 0)
-#         inputs_embeds_provided = (not inputs_embeds.size()[1] == 0)
+        #input_ids_provided = (not input_ids.size()[1] == 0)
+        #token_type_ids_provided = (not token_type_ids.size()[1] == 0)
+        #position_ids_provided = (not position_ids.size()[1] == 0)
+        #inputs_embeds_provided = (not inputs_embeds.size()[1] == 0)
         
         if input_ids_provided:
             input_shape = input_ids.size()
@@ -537,12 +537,12 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
         head_mask_provided = not head_mask is None
         encoder_attention_mask_provided = not encoder_attention_mask is None
 
-#         input_ids_provided = (not input_ids.size()[1] == 0)
-#         input_embeds_provided = (not inputs_embeds.size()[1] == 0)
-#         attention_mask_provided = (not attention_mask.size()[1] == 0)
-#         token_type_ids_provided = (not token_type_ids.size()[1] == 0)
-#         encoder_hidden_states_provided = (not encoder_hidden_states.size()[1] == 0)
-#         head_mask_provided = (not head_mask.size()[1] == 0)
+        #input_ids_provided = (not input_ids.size()[1] == 0)
+        #input_embeds_provided = (not inputs_embeds.size()[1] == 0)
+        #attention_mask_provided = (not attention_mask.size()[1] == 0)
+        #token_type_ids_provided = (not token_type_ids.size()[1] == 0)
+        #encoder_hidden_states_provided = (not encoder_hidden_states.size()[1] == 0)
+        #head_mask_provided = (not head_mask.size()[1] == 0)
         
         if input_ids_provided and input_embeds_provided:
             raise ValueError(
