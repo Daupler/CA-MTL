@@ -70,14 +70,15 @@ class MyBertSelfAttention9(nn.Module):
         task_embedding: torch.Tensor = torch.zeros(size=(1,0)),
     ):
 
-        encoder_hidden_states_provided = (not encoder_hidden_states.size()[1] == 0)
-        attention_mask_provided = (not attention_mask.size()[1] == 0)
-        head_mask_provided = (not head_mask.size()[1] == 0)
+        encoder_hidden_states_not_provided = (
+            input_ids is None) or (encoder_hidden_states.size()[1] == 0)
+        attention_mask_not_provided = (input_ids is None) or (attention_mask.size()[1] == 0)
+        head_mask_not_provided = (input_ids is None) or (head_mask.size()[1] == 0)
 
         # If this is instantiated as a cross-attention module, the keys
         # and values come from an encoder; the attention mask needs to be
         # such that the encoder's padding tokens are not attended to.
-        if encoder_hidden_states_provided:
+        if not encoder_hidden_states_not_provided:
             mixed_value_layer = self.value(encoder_hidden_states)
             attention_mask = encoder_attention_mask
         else:
@@ -102,7 +103,7 @@ class MyBertSelfAttention9(nn.Module):
         # b x seq len x hid dim
 
         # Take the dot product between "query" and "key" to get the raw attention scores.
-        if attention_mask_provided:
+        if not attention_mask_not_provided:
             # Apply the attention mask is (precomputed for all layers in BertModel forward() function)
             attention_scores = attention_scores + attention_mask
 
@@ -115,7 +116,7 @@ class MyBertSelfAttention9(nn.Module):
         attention_probs = self.dropout(attention_probs)
 
         # Mask heads if we want to
-        if head_mask_provided:
+        if not head_mask_not_provided:
             attention_probs = attention_probs * head_mask
 
         context_layer = torch.matmul(attention_probs, value_layer)
@@ -288,9 +289,10 @@ class MyBertLayer9(nn.Module):
             1:
         ]  # add self attentions if we output attention weights
 
-        encoder_hidden_states_provided = (not encoder_hidden_states.size()[1] == 0)
+        encoder_hidden_states_not_provided = (
+            encoder_hidden_states is None) or (not encoder_hidden_states.size()[1] == 0)
         
-        #if self.is_decoder and encoder_hidden_states_provided:
+        #if self.is_decoder and not encoder_hidden_states_not_provided:
         #    cross_attention_outputs = self.crossattention(
         #        attention_output,
         #        attention_mask,
@@ -424,11 +426,6 @@ class BertEmbeddings(nn.Module):
                 position_ids: torch.Tensor = torch.zeros(size=(1,0)),
                 inputs_embeds: torch.Tensor = torch.zeros(size=(1,0))):
 
-        #input_ids_provided = not input_ids is None
-        #token_type_ids_provided = not token_type_ids is None
-        #position_ids_provided = not position_ids is None
-        #inputs_embeds_provided = not inputs_embeds is None
-        
         input_ids_not_provided = (input_ids is None) or (input_ids.size()[1] == 0)
         token_type_ids_not_provided = (token_type_ids is None) or (token_type_ids.size()[1] == 0)
         position_ids_not_provided = (position_ids is None) or (position_ids.size()[1] == 0)
@@ -552,14 +549,6 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
         """
         task_type = self._create_task_type(task_id)
         task_embedding = self.task_type_embeddings(task_type)
-        
-        #input_ids_provided = not input_ids is None
-        #input_embeds_provided = not inputs_embeds is None
-        #attention_mask_provided = not attention_mask is None
-        #token_type_ids_provided = not token_type_ids is None
-        #encoder_hidden_states_provided = not encoder_hidden_states is None
-        #head_mask_provided = not head_mask is None
-        #encoder_attention_mask_provided = not encoder_attention_mask is None
 
         input_ids_not_provided = (
             input_ids is None) or (input_ids.size()[1] == 0)
