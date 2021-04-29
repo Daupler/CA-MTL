@@ -48,6 +48,12 @@ class CBDA(nn.Module):
         film_output_size = self.output_size * num_film_layers * 2
         self.gb_weights = nn.Linear(self.input_size, film_output_size)
         self.gb_weights.bias.data.fill_(0)
+        
+        # TorchScript does not support variable length arguments which result in this 
+        # calculation. To address this in the short term, I am fixing the allowable inputs
+        # to the hidden_size and max_seq_length since they determine exclusively the size of the
+        # tensors here
+        assert (self.input_size==768) & (self.output_size==86) & (self.blocks==3),"CBDA is only applicable right now with max_seq_length=256 and hidden_size=768"
 
     def forward(self, x_cond: torch.Tensor, x_to_film: torch.Tensor):
         gb = self.gb_weights(x_cond).unsqueeze(1)
@@ -55,8 +61,17 @@ class CBDA(nn.Module):
         out = (1 + gamma) * x_to_film + beta
         if self.layer_norm is not None:
             out = self.layer_norm(out)
-        out = [torch.block_diag(*list(out_b.chunk(self.blocks, 0))) for out_b in out]
-        out = torch.stack(out)
+        
+        # breaking up the block diagonal process here from the nice little list comprehension
+        # that TorchScript does not like, into a control structure and explicitly unpacking
+        # the individual chunks to pass them to the block_diag method since the expand operator
+        # is not supported with TorchScript
+        block_diag_out = []
+        for out_b in out:
+            chunks = list(out_b.chunk(self.blocks, 0))
+            block_diag_out.append(torch.block_diag(chunks[0], chunks[1], chunks[2]))
+        #out = [torch.block_diag(*list(out_b.chunk(self.blocks, 0))) for out_b in out]
+        out = torch.stack(block_diag_out)
         return out[:, :, :out.size(1)]
 
 
