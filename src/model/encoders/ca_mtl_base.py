@@ -304,7 +304,8 @@ class MyBertLayer9(nn.Module):
 
         intermediate_output = self.intermediate(attention_output)
         layer_output = self.output(intermediate_output, attention_output, task_embedding, task_id)
-        outputs = (layer_output,) + outputs
+        #outputs = (layer_output,) + outputs
+        outputs = (layer_output,)
         return outputs
 
 
