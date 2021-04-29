@@ -244,9 +244,9 @@ class MyBertAdapterLayer9(nn.Module):
             hidden_states, attention_mask, head_mask, task_embedding=task_embedding, task_id=task_id
         )
         attention_output = self_attention_outputs[0]
-        outputs = self_attention_outputs[
-            1:
-        ]  # add self attentions if we output attention weights
+        #outputs = self_attention_outputs[
+        #    1:
+        #]  # add self attentions if we output attention weights
 
         intermediate_output = self.new_intermediate(attention_output)
         layer_output = self.new_output(
@@ -255,7 +255,8 @@ class MyBertAdapterLayer9(nn.Module):
         adapted_layer_output = self.adapter(
             attention_output, layer_output, task_embedding=task_embedding, task_id=task_id
         )
-        outputs = (adapted_layer_output,) + outputs
+        #outputs = (adapted_layer_output,) + outputs
+        outputs = (adapted_layer_output,)
         return outputs
 
 
