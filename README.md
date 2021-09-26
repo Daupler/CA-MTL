@@ -36,6 +36,9 @@ Note: Newer versions of the requirements should work, but was not tested.
 python3.7 -m venv ca_mtl_env
 source ca_mtl_env/bin/activate 
 
+# Update pip to meet sentencepiece requirement
+pip install -U pip
+
 # Install the requirements
 pip install requirements-with-torch.txt
 # If you are using an environment that have torch already installed use "requirements.txt"
@@ -85,7 +88,9 @@ docker run -v /data:$DATA_DIR $DOCKER_IMG --model_name_of_path CA-MTL-base --dat
 ### Usage 
 ```
 usage: run.py [-h] --model_name_or_path MODEL_NAME_OR_PATH --data_dir DATA_DIR
-              [--tasks TASKS [TASKS ...]] [--overwrite_cache]
+              [--encoder_type]
+              [--tasks TASKS [TASKS ...]] [--task_data_folders TASKS [TASK_DATA_FOLDERS ...]] 
+              [--overwrite_cache]
               [--max_seq_length MAX_SEQ_LENGTH] --output_dir OUTPUT_DIR
               [--overwrite_output_dir] [--do_train] [--do_eval] [--do_predict]
               [--evaluate_during_training]
@@ -105,7 +110,7 @@ usage: run.py [-h] --model_name_or_path MODEL_NAME_OR_PATH --data_dir DATA_DIR
               [--tpu_num_cores TPU_NUM_CORES] [--tpu_metrics_debug]
               [--use_mt_uncertainty]
 
-optional arguments:
+arguments:
   -h, --help            show this help message and exit
  --model_name_or_path MODEL_NAME_OR_PATH
                         Path to pretrained model or model identifier from: CA-
@@ -113,9 +118,15 @@ optional arguments:
                         uncased, bert-large-cased, bert-large-uncased
   --data_dir DATA_DIR   The input data dir. Should contain the .tsv files (or
                         other data files) for the task.
+  --encoder-name        The string corresponding to the encoder type to be utilized by CAMtl
+                        This will default to the model_name_or_path if not passes. Only required
+                        when scoring a previously fine-tuned model
   --tasks TASKS [TASKS ...]
                         The task file that contains the tasks to train on. If
                         None all tasks will be used
+  --task_data_folders TASK_DATA_FOLDERS [TASK_DATA_FOLDERS ...]
+                        The folders where the data lies for your tasks. This will be the folder
+                        under your DATA_DIR
   --overwrite_cache     Overwrite the cached training and evaluation sets
   --max_seq_length MAX_SEQ_LENGTH
                         The maximum total input sequence length after

@@ -3,14 +3,17 @@ import sys
 import re
 import json
 import logging
+import dataclasses
 
 import torch
 from transformers import (
     HfArgumentParser,
     set_seed,
-    AutoTokenizer,
-    AutoConfig,
+#     AutoTokenizer,
+#     AutoConfig,
     EvalPrediction,
+    BertConfig, 
+    BertTokenizer
 )
 
 from src.model.ca_mtl import CaMtl, CaMtlArguments
@@ -60,8 +63,11 @@ def parse_cmd_args():
 
     logger.info("Training/evaluation parameters %s", training_args)
 
+    # default encoder type to model path if not provided
+    if model_args.encoder_type is None:
+        model_args.encoder_type = model_args.model_name_or_path
+        
     return model_args, data_args, training_args
-
 
 def create_eval_datasets(mode, data_args, tokenizer):
     eval_datasets = {}
@@ -69,14 +75,8 @@ def create_eval_datasets(mode, data_args, tokenizer):
         eval_datasets[task_name] = TaskDataset(
             task_name, task_id, data_args, tokenizer, mode=mode
         )
-        if task_name == "mnli":
-            # Loop to handle MNLI double evaluation (matched, mis-matched)
-            eval_datasets["mnli-mm"] = TaskDataset(
-                "mnli-mm", task_id, data_args, tokenizer, mode=mode
-            )
 
     return eval_datasets
-
 
 def main():
     model_args, data_args, training_args = parse_cmd_args()
@@ -85,7 +85,7 @@ def main():
 
     set_seed(training_args.seed)
 
-    config = AutoConfig.from_pretrained(
+    config = BertConfig.from_pretrained(
         CaMtl.get_base_model(model_args.model_name_or_path),
     )
 
@@ -97,7 +97,7 @@ def main():
 
     logger.info(model)
 
-    tokenizer = AutoTokenizer.from_pretrained(
+    tokenizer = BertTokenizer.from_pretrained(
         CaMtl.get_base_model(model_args.model_name_or_path),
     )
 
@@ -108,13 +108,13 @@ def main():
         data_args,
         model=model,
         args=training_args,
-        train_dataset=MultiTaskDataset(data_args, tokenizer, limit_length=50)
+        train_dataset=MultiTaskDataset(data_args, tokenizer, limit_length=None)
         if training_args.do_train
         else None,
-        eval_datasets=create_eval_datasets(Split.dev, data_args, tokenizer)
+        eval_datasets=create_eval_datasets(Split.train_dev, data_args, tokenizer)
         if training_args.do_eval or training_args.evaluate_during_training
         else None,
-        test_datasets=create_eval_datasets(Split.test, data_args, tokenizer)
+        test_datasets=create_eval_datasets(Split.dev, data_args, tokenizer)
         if training_args.do_predict
         else None,
     )
@@ -131,8 +131,33 @@ def main():
 
     if training_args.do_predict:
         trainer.predict()
+    
+    # rename the checkpoint model directories 
+    files = os.listdir(training_args.output_dir)
+    checkpoints = [file for file in files if file.startswith('checkpoint')]
+    for checkpoint in checkpoints:
+        source = f"{training_args.output_dir}/{checkpoint}"
+        new_dir_name = checkpoint.replace('checkpoint', trainer.run_name)
+        destination = f"{training_args.output_dir}/{new_dir_name}"
+        os.rename(source, destination)
+        
+    # move additional metadata required to track models into model directory
+    out_args = dataclasses.asdict(data_args)
+    out_args.update(dataclasses.asdict(model_args))
+    # get label set and data metadata
+    out_args["label_set"] = {}
+    out_args["data_metadata"] = {}
+    for task_folder in data_args.task_data_folders:
+        metadata = json.load(open(f"{data_args.data_dir}/{task_folder}/metadata.json", 'r'))
+        out_args["label_set"][metadata['task_name']] = metadata['labels']
+        out_args["data_metadata"][metadata['task_name']] = metadata
 
+    file = os.listdir(training_args.output_dir)
+    saved_models = [file for file in file if file.startswith(trainer.run_name)]
+    for model in saved_models:
+        json.dump(out_args, open(f"{training_args.output_dir}/{model}/metadata.json", 'w'))
 
+        
 def _mp_fn(index):
     # For xla_spawn (TPUs)
     main()

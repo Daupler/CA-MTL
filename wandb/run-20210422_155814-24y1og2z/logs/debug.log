@@ -1,0 +1,77 @@
+2021-04-22 15:58:14,323 INFO    MainThread:7310 [wandb_setup.py:_flush():69] setting env: {'project': 'CV-CA-MTL'}
+2021-04-22 15:58:14,323 INFO    MainThread:7310 [wandb_setup.py:_flush():69] setting login settings: {}
+2021-04-22 15:58:14,323 INFO    MainThread:7310 [wandb_init.py:_log_setup():336] Logging user logs to /home/datasci/CA-MTL/wandb/run-20210422_155814-24y1og2z/logs/debug.log
+2021-04-22 15:58:14,323 INFO    MainThread:7310 [wandb_init.py:_log_setup():337] Logging internal logs to /home/datasci/CA-MTL/wandb/run-20210422_155814-24y1og2z/logs/debug-internal.log
+2021-04-22 15:58:14,323 INFO    MainThread:7310 [wandb_init.py:init():369] calling init triggers
+2021-04-22 15:58:14,323 INFO    MainThread:7310 [wandb_init.py:init():376] wandb.init called with sweep_config: {}
+config: {'output_dir': '/hub/CA-MTL/mock_models', 'overwrite_output_dir': False, 'do_train': True, 'do_eval': True, 'do_predict': True, 'evaluate_during_training': True, 'per_device_train_batch_size': 32, 'per_device_eval_batch_size': 32, 'per_gpu_train_batch_size': None, 'per_gpu_eval_batch_size': None, 'gradient_accumulation_steps': 1, 'learning_rate': 5e-05, 'weight_decay': 0.0, 'adam_epsilon': 1e-08, 'max_grad_norm': 1.0, 'num_train_epochs': 7.0, 'max_steps': -1, 'warmup_steps': 0, 'logging_dir': None, 'logging_first_step': False, 'logging_steps': 500, 'save_steps': 1500, 'save_total_limit': 10, 'no_cuda': False, 'seed': 43, 'fp16': False, 'fp16_opt_level': 'O1', 'local_rank': -1, 'tpu_num_cores': None, 'tpu_metrics_debug': False, 'use_mt_uncertainty': False, 'uniform_mt_sampling': False, 'percent_of_max_data_size': 1.0, '__cached__setup_devices': (device(type='cuda'), 1)}
+2021-04-22 15:58:14,323 INFO    MainThread:7310 [wandb_init.py:init():418] starting backend
+2021-04-22 15:58:14,323 INFO    MainThread:7310 [backend.py:_multiprocessing_setup():71] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2021-04-22 15:58:14,341 INFO    MainThread:7310 [backend.py:ensure_launched():123] starting backend process...
+2021-04-22 15:58:14,355 INFO    MainThread:7310 [backend.py:ensure_launched():128] started backend process with pid: 7439
+2021-04-22 15:58:14,364 INFO    MainThread:7310 [wandb_init.py:init():423] backend started and connected
+2021-04-22 15:58:14,366 INFO    MainThread:7310 [wandb_init.py:init():463] updated telemetry
+2021-04-22 15:58:14,366 INFO    MainThread:7310 [wandb_init.py:init():482] communicating current version
+2021-04-22 15:58:14,787 INFO    MainThread:7310 [wandb_init.py:init():487] got version response upgrade_message: "wandb version 0.10.27 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2021-04-22 15:58:14,787 INFO    MainThread:7310 [wandb_init.py:init():495] communicating run to backend with 30 second timeout
+2021-04-22 15:58:15,038 INFO    MainThread:7310 [wandb_init.py:init():520] starting run threads in backend
+2021-04-22 15:58:15,070 INFO    MainThread:7310 [wandb_run.py:_console_start():1524] atexit reg
+2021-04-22 15:58:15,071 INFO    MainThread:7310 [wandb_run.py:_redirect():1371] redirect: SettingsConsole.REDIRECT
+2021-04-22 15:58:15,071 INFO    MainThread:7310 [wandb_run.py:_redirect():1376] Redirecting console.
+2021-04-22 15:58:15,072 INFO    MainThread:7310 [wandb_run.py:_redirect():1438] Redirects installed.
+2021-04-22 15:58:15,072 INFO    MainThread:7310 [wandb_init.py:init():544] run started, returning control to user process
+2021-04-22 15:58:15,072 INFO    MainThread:7310 [wandb_watch.py:watch():39] Watching
+2021-04-22 17:10:05,851 INFO    MainThread:7310 [wandb_run.py:_atexit_cleanup():1494] got exitcode: 0
+2021-04-22 17:10:05,852 INFO    MainThread:7310 [wandb_run.py:_restore():1466] restore
+2021-04-22 17:10:08,110 INFO    MainThread:7310 [wandb_run.py:_wait_for_finish():1616] got exit ret: file_counts {
+  wandb_count: 1
+  media_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 21893
+  total_bytes: 21893
+}
+
+2021-04-22 17:10:09,145 INFO    MainThread:7310 [wandb_run.py:_wait_for_finish():1616] got exit ret: file_counts {
+  wandb_count: 5
+  media_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 21893
+  total_bytes: 348809
+}
+
+2021-04-22 17:10:09,869 INFO    MainThread:7310 [wandb_run.py:_wait_for_finish():1616] got exit ret: file_counts {
+  wandb_count: 5
+  media_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 348809
+  total_bytes: 348809
+}
+
+2021-04-22 17:10:09,972 INFO    MainThread:7310 [wandb_run.py:_wait_for_finish():1616] got exit ret: file_counts {
+  wandb_count: 5
+  media_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 348809
+  total_bytes: 348809
+}
+
+2021-04-22 17:10:10,075 INFO    MainThread:7310 [wandb_run.py:_wait_for_finish():1616] got exit ret: done: true
+exit_result {
+}
+file_counts {
+  wandb_count: 5
+  media_count: 1
+}
+pusher_stats {
+  uploaded_bytes: 348809
+  total_bytes: 348809
+}
+
+2021-04-22 17:10:11,146 INFO    MainThread:7310 [wandb_run.py:_show_summary():1771] rendering summary
+2021-04-22 17:10:11,146 INFO    MainThread:7310 [wandb_run.py:_show_history():1809] rendering history
+2021-04-22 17:10:11,147 INFO    MainThread:7310 [wandb_run.py:_show_files():1838] logging synced files

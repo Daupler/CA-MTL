@@ -6,7 +6,7 @@ from transformers import PreTrainedTokenizer
 
 
 from src.utils.misc import Split, MultiTaskDataArguments, MultiTaskInputFeatures
-from src.data.glue_utils import load_glue_task_features
+from src.data.data_utils import load_task_features
 
 
 class TaskDataset(Dataset):
@@ -20,10 +20,12 @@ class TaskDataset(Dataset):
         tokenizer: PreTrainedTokenizer,
         limit_length: Optional[int] = None,
         mode: Union[str, Split] = Split.train,
+        label_list: list = None,
     ):
-        self.task_name = task_name
-        self.features, self.labels = load_glue_task_features(
-            task_name, task_id, args, tokenizer, mode, limit_length
+        self.task_name = str(task_name)
+        self.mode = mode
+        self.features, self.labels = load_task_features(
+            task_name, task_id, args, tokenizer, mode, limit_length, label_list
         )
 
     def __len__(self) -> int:
