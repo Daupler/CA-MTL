@@ -1,15 +1,15 @@
 import math
 import torch
 import torch.nn as nn
+from typing import List, Optional, Union
+from transformers import BertModel, BertTokenizer, BertConfig
 from transformers.modeling_bert import (
-#     BertEmbeddings,
     BertLayerNorm,
     BertPooler,
     BertPreTrainedModel,
     BertAttention,
     BertIntermediate,
     BertLayer,
-    BertSelfOutput,
 )
 
 from src.model.encoders.conditional_modules import FiLM, CBDA, ConditionalBottleNeck, ConditionalLayerNorm
@@ -56,23 +56,28 @@ class MyBertSelfAttention9(nn.Module):
             self.num_attention_heads,
             self.attention_head_size,
         )
-        x = x.view(*new_x_shape)
+        x = x.view(new_x_shape)
         return x.permute(0, 2, 1, 3)
 
     def forward(
         self,
-        hidden_states,
-        attention_mask=None,
-        head_mask=None,
-        encoder_hidden_states=None,
-        encoder_attention_mask=None,
-        task_embedding=None,
+        hidden_states: torch.Tensor,
+        attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        head_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_hidden_states: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        task_embedding: torch.Tensor = torch.zeros(size=(1,0)),
     ):
+
+        encoder_hidden_states_not_provided = (
+            encoder_hidden_states is None) or (encoder_hidden_states.size()[1] == 0)
+        attention_mask_not_provided = (attention_mask is None) or (attention_mask.size()[1] == 0)
+        head_mask_not_provided = (head_mask is None) or (head_mask.size()[1] == 0)
 
         # If this is instantiated as a cross-attention module, the keys
         # and values come from an encoder; the attention mask needs to be
         # such that the encoder's padding tokens are not attended to.
-        if encoder_hidden_states is not None:
+        if not encoder_hidden_states_not_provided:
             mixed_value_layer = self.value(encoder_hidden_states)
             attention_mask = encoder_attention_mask
         else:
@@ -97,35 +102,29 @@ class MyBertSelfAttention9(nn.Module):
         # b x seq len x hid dim
 
         # Take the dot product between "query" and "key" to get the raw attention scores.
-        if attention_mask is not None:
+        if not attention_mask_not_provided:
             # Apply the attention mask is (precomputed for all layers in BertModel forward() function)
             attention_scores = attention_scores + attention_mask
 
         # y = ax + b(task_emb)
         # Normalize the attention scores to probabilities.
-        attention_probs = nn.Softmax(dim=-1)(
-            attention_scores
-        )  # b x num heads x seq length x head dim
-
+        attention_probs = nn.functional.softmax(attention_scores, dim=-1)
+        
         # This is actually dropping out entire tokens to attend to, which might
         # seem a bit unusual, but is taken from the original Transformer paper.
         attention_probs = self.dropout(attention_probs)
 
         # Mask heads if we want to
-        if head_mask is not None:
+        if not head_mask_not_provided:
             attention_probs = attention_probs * head_mask
 
         context_layer = torch.matmul(attention_probs, value_layer)
 
         context_layer = context_layer.permute(0, 2, 1, 3).contiguous()
         new_context_layer_shape = context_layer.size()[:-2] + (self.all_head_size,)
-        context_layer = context_layer.view(*new_context_layer_shape)
+        context_layer = context_layer.view(new_context_layer_shape)
 
-        outputs = (
-            (context_layer, attention_probs)
-            if self.output_attentions
-            else (context_layer,)
-        )
+        outputs = (context_layer,)
         return outputs
 
 
@@ -142,7 +141,22 @@ class MyBertSelfOutput9(nn.Module):
         hidden_states = self.LayerNorm(hidden_states + input_tensor, task_embedding, task_id)
         return hidden_states
 
+ # this module is exactly the same as the BertSelfOutput module except it takes the 
+ # task_embedding and task_id in the forward pass even though it does not use them. This is
+ # an artifact of meeting TorchScript requirements
+class MyBertSelfOutput(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
+        self.LayerNorm = BertLayerNorm(config.hidden_size, eps=config.layer_norm_eps)
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
+    def forward(self, hidden_states, input_tensor, task_embedding, task_id):
+        hidden_states = self.dense(hidden_states)
+        hidden_states = self.dropout(hidden_states)
+        hidden_states = self.LayerNorm(hidden_states + input_tensor)
+        return hidden_states    
+    
 class MyBertOutput9(nn.Module):
     def __init__(self, config):
         super().__init__()
@@ -165,18 +179,18 @@ class MyBertAttention9(BertAttention):
         if add_conditional_layernorm:
             self.output = MyBertSelfOutput9(config)
         else:
-            self.output = BertSelfOutput(config)
+            self.output = MyBertSelfOutput(config)
         self.pruned_heads = set()
 
     def forward(
         self,
         hidden_states,
-        attention_mask=None,
-        head_mask=None,
-        encoder_hidden_states=None,
-        encoder_attention_mask=None,
-        task_embedding=None,
-        task_id=None
+        attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        head_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_hidden_states: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        task_embedding: torch.Tensor = torch.zeros(size=(1,0)),
+        task_id: torch.Tensor = torch.zeros(size=(1,0)),
     ):
         self_outputs = self.self(
             hidden_states,
@@ -186,13 +200,12 @@ class MyBertAttention9(BertAttention):
             encoder_attention_mask,
             task_embedding=task_embedding,
         )
-        if self.add_conditional_layernorm:
-            attention_output = self.output(self_outputs[0], hidden_states, task_embedding, task_id)
-        else:
-            attention_output = self.output(self_outputs[0], hidden_states)
-        outputs = (attention_output,) + self_outputs[
-            1:
-        ]  # add attentions if we output them
+        
+        attention_output = self.output(self_outputs[0], hidden_states, task_embedding, task_id)
+        outputs = (attention_output,)
+        #outputs = (attention_output,) + self_outputs[
+        #    1:
+        #]  # add attentions if we output them... we are not doing this because of TorchScript
         return outputs
 
 
@@ -220,20 +233,20 @@ class MyBertAdapterLayer9(nn.Module):
     def forward(
         self,
         hidden_states,
-        attention_mask=None,
-        head_mask=None,
-        encoder_hidden_states=None,
-        encoder_attention_mask=None,
-        task_embedding=None,
-        task_id=None
+        attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        head_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_hidden_states: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        task_embedding: torch.Tensor = torch.zeros(size=(1,0)),
+        task_id: torch.Tensor = torch.zeros(size=(1,0)),
     ):
         self_attention_outputs = self.new_attention(
             hidden_states, attention_mask, head_mask, task_embedding=task_embedding, task_id=task_id
         )
         attention_output = self_attention_outputs[0]
-        outputs = self_attention_outputs[
-            1:
-        ]  # add self attentions if we output attention weights
+        #outputs = self_attention_outputs[
+        #    1:
+        #]  # add self attentions if we output attention weights
 
         intermediate_output = self.new_intermediate(attention_output)
         layer_output = self.new_output(
@@ -242,7 +255,8 @@ class MyBertAdapterLayer9(nn.Module):
         adapted_layer_output = self.adapter(
             attention_output, layer_output, task_embedding=task_embedding, task_id=task_id
         )
-        outputs = (adapted_layer_output,) + outputs
+        #outputs = (adapted_layer_output,) + outputs
+        outputs = (adapted_layer_output,)
         return outputs
 
 
@@ -259,12 +273,12 @@ class MyBertLayer9(nn.Module):
     def forward(
         self,
         hidden_states,
-        attention_mask=None,
-        head_mask=None,
-        encoder_hidden_states=None,
-        encoder_attention_mask=None,
-        task_embedding=None,
-        task_id=None
+        attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        head_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_hidden_states: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        task_embedding: torch.Tensor = torch.zeros(size=(1,0)),
+        task_id: torch.Tensor = torch.zeros(size=(1,0)),
     ):
         self_attention_outputs = self.attention(
             hidden_states, attention_mask, head_mask, task_embedding=task_embedding, task_id=task_id
@@ -274,22 +288,26 @@ class MyBertLayer9(nn.Module):
             1:
         ]  # add self attentions if we output attention weights
 
-        if self.is_decoder and encoder_hidden_states is not None:
-            cross_attention_outputs = self.crossattention(
-                attention_output,
-                attention_mask,
-                head_mask,
-                encoder_hidden_states,
-                encoder_attention_mask,
-            )
-            attention_output = cross_attention_outputs[0]
-            outputs = (
-                outputs + cross_attention_outputs[1:]
-            )  # add cross attentions if we output attention weights
+        encoder_hidden_states_not_provided = (
+            encoder_hidden_states is None) or (not encoder_hidden_states.size()[1] == 0)
+        
+        #if self.is_decoder and not encoder_hidden_states_not_provided:
+        #    cross_attention_outputs = self.crossattention(
+        #        attention_output,
+        #        attention_mask,
+        #        head_mask,
+        #        encoder_hidden_states,
+        #        encoder_attention_mask,
+        #    )
+        #    attention_output = cross_attention_outputs[0]
+        #    outputs = (
+        #        outputs + cross_attention_outputs[1:]
+        #    )  # add cross attentions if we output attention weights
 
         intermediate_output = self.intermediate(attention_output)
         layer_output = self.output(intermediate_output, attention_output, task_embedding, task_id)
-        outputs = (layer_output,) + outputs
+        #outputs = (layer_output,) + outputs
+        outputs = (layer_output,)
         return outputs
 
 
@@ -302,22 +320,24 @@ class BertLayer9(BertLayer):
     def forward(
         self,
         hidden_states,
-        attention_mask=None,
-        head_mask=None,
-        encoder_hidden_states=None,
-        encoder_attention_mask=None,
-        task_embedding=None,
-        task_id=None
+        attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        head_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_hidden_states: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        task_embedding: torch.Tensor = torch.zeros(size=(1,0)),
+        task_id: torch.Tensor = torch.zeros(size=(1,0)),
     ):
         self_attention_outputs = self.attention(
             hidden_states, attention_mask, head_mask, task_embedding=task_embedding, task_id=task_id
         )
         attention_output = self_attention_outputs[0]
-        outputs = self_attention_outputs[1:]  # add self attentions if we output attention weights
+        # outputs = self_attention_outputs[1:]  # add self attentions if we output attention weights
+        # we are not outputting attention as an option at this point in time
 
         intermediate_output = self.intermediate(attention_output)
         layer_output = self.output(intermediate_output, attention_output)
-        outputs = (layer_output,) + outputs
+        #outputs = (layer_output,) + outputs
+        outputs = (layer_output,)
         return outputs
 
 
@@ -339,19 +359,21 @@ class MyBertEncoder9(nn.Module):
     def forward(
         self,
         hidden_states,
-        attention_mask=None,
-        head_mask=None,
-        encoder_hidden_states=None,
-        encoder_attention_mask=None,
-        task_type=None,
-        task_embedding=None
+        attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        head_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_hidden_states: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        task_type: torch.Tensor = torch.zeros(size=(1,0)),
+        task_embedding: torch.Tensor = torch.zeros(size=(1,0)),
     ):
         all_hidden_states = ()
         all_attentions = ()
         task_embedding = self.task_transformation(task_embedding)
+        
+        all_hidden_states = []
         for i, layer_module in enumerate(self.layer):
             if self.output_hidden_states:
-                all_hidden_states = all_hidden_states + (hidden_states,)
+                all_hidden_states.append(hidden_states)
 
             layer_outputs = layer_module(
                 hidden_states,
@@ -359,23 +381,26 @@ class MyBertEncoder9(nn.Module):
                 head_mask[i],
                 encoder_hidden_states,
                 encoder_attention_mask,
-                task_embedding,
-                task_type
+                task_embedding=task_embedding,
+                task_id=task_type
             )
             hidden_states = layer_outputs[0]
 
-            if self.output_attentions:
-                all_attentions = all_attentions + (layer_outputs[1],)
+            #if self.output_attentions:
+            #    all_attentions = all_attentions + (layer_outputs[1],)
 
-        # Add last layer
+        # THIS IS IMPORTANT... I AM FORCING THE MODULE TO ALWAYS RETURN ALL HIDDEN STATES 
+        # THIS IS FOR TORCHSCRIPT
         if self.output_hidden_states:
-            all_hidden_states = all_hidden_states + (hidden_states,)
-
-        outputs = (hidden_states,)
-        if self.output_hidden_states:
-            outputs = outputs + (all_hidden_states,)
-        if self.output_attentions:
-            outputs = outputs + (all_attentions,)
+            # Add last layer
+            all_hidden_states.append(hidden_states)
+            #all_hidden_states = tuple(all_hidden_states)
+            # Update outputs
+            outputs = (hidden_states, all_hidden_states)
+        else:
+            outputs = (hidden_states, all_hidden_states)
+        #if self.output_attentions:
+        #    outputs = outputs + (all_attentions,)
         return outputs  # last-layer hidden state, (all hidden states), (all attentions)
 
     
@@ -399,21 +424,31 @@ class BertEmbeddings(nn.Module):
         self.LayerNorm = BertLayerNorm(config.hidden_size, eps=config.layer_norm_eps)
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
 
-    def forward(self, input_ids=None, token_type_ids=None, position_ids=None, inputs_embeds=None):
-        if input_ids is not None:
+    def forward(self, 
+                input_ids: torch.Tensor = torch.zeros(size=(1,0)), 
+                token_type_ids: torch.Tensor = torch.zeros(size=(1,0)),
+                position_ids: torch.Tensor = torch.zeros(size=(1,0)),
+                inputs_embeds: torch.Tensor = torch.zeros(size=(1,0))):
+
+        input_ids_not_provided = (input_ids is None) or (input_ids.size()[1] == 0)
+        token_type_ids_not_provided = (token_type_ids is None) or (token_type_ids.size()[1] == 0)
+        position_ids_not_provided = (position_ids is None) or (position_ids.size()[1] == 0)
+        inputs_embeds_not_provided = (inputs_embeds is None) or (inputs_embeds.size()[1] == 0)
+        
+        if not input_ids_not_provided:
             input_shape = input_ids.size()
         else:
             input_shape = inputs_embeds.size()[:-1]
 
         seq_length = input_shape[1]
-        device = input_ids.device if input_ids is not None else inputs_embeds.device
-        if position_ids is None:
+        device = input_ids.device if not input_ids_not_provided else inputs_embeds.device
+        if position_ids_not_provided:
             position_ids = torch.arange(seq_length, dtype=torch.long, device=device)
             position_ids = position_ids.unsqueeze(0).expand(input_shape)
-        if token_type_ids is None:
+        if token_type_ids_not_provided:
             token_type_ids = torch.zeros(input_shape, dtype=torch.long, device=device)
 
-        if inputs_embeds is None:
+        if inputs_embeds_not_provided:
             inputs_embeds = self.word_embeddings(input_ids)
         position_embeddings = self.position_embeddings(position_ids)
         token_type_embeddings = self.token_type_embeddings(token_type_ids)
@@ -463,7 +498,7 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
 
     """
 
-    def __init__(self, config, data_args=None, **kwargs):
+    def __init__(self, config, data_args=None):
         super().__init__(config)
         tasks = data_args.tasks
         self.task_id_2_task_idx = {i: i for i, t in enumerate(tasks)}
@@ -497,15 +532,15 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
 
     def forward(
         self,
-        input_ids=None,
-        attention_mask=None,
-        token_type_ids=None,
-        position_ids=None,
-        head_mask=None,
-        inputs_embeds=None,
-        encoder_hidden_states=None,
-        encoder_attention_mask=None,
-        **kwargs,
+        input_ids: torch.Tensor = torch.zeros(size=(1,0)),
+        attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        token_type_ids: torch.Tensor = torch.zeros(size=(1,0)),
+        position_ids: torch.Tensor = torch.zeros(size=(1,0)),
+        head_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        inputs_embeds: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_hidden_states: torch.Tensor = torch.zeros(size=(1,0)),
+        encoder_attention_mask: torch.Tensor = torch.zeros(size=(1,0)),
+        task_id=None,
     ):
         """Forward pass on the Model.
 
@@ -516,25 +551,38 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
             https://arxiv.org/abs/1706.03762
 
         """
-        task_type = self._create_task_type(kwargs["task_id"])
+        task_type = self._create_task_type(task_id)
         task_embedding = self.task_type_embeddings(task_type)
 
-        if input_ids is not None and inputs_embeds is not None:
+        input_ids_not_provided = (
+            input_ids is None) or (input_ids.size()[1] == 0)
+        input_embeds_not_provided = (
+            inputs_embeds is None) or (inputs_embeds.size()[1] == 0)
+        attention_mask_not_provided = (
+            attention_mask is None) or (attention_mask.size()[1] == 0)
+        token_type_ids_not_provided = (
+            token_type_ids is None) or (token_type_ids.size()[1] == 0)
+        encoder_hidden_states_not_provided = (
+            encoder_hidden_states is None) or (encoder_hidden_states.size()[1] == 0)
+        head_mask_not_provided = (
+            head_mask is None) or (head_mask.size()[1] == 0)
+        
+        if not input_ids_not_provided and not input_embeds_not_provided:
             raise ValueError(
                 "You cannot specify both input_ids and inputs_embeds at the same time"
             )
-        elif input_ids is not None:
+        elif not input_ids_not_provided:
             input_shape = input_ids.size()
-        elif inputs_embeds is not None:
+        elif not input_embeds_not_provided:
             input_shape = inputs_embeds.size()[:-1]
         else:
             raise ValueError("You have to specify either input_ids or inputs_embeds")
 
-        device = input_ids.device if input_ids is not None else inputs_embeds.device
+        device = input_ids.device if not input_ids_not_provided else inputs_embeds.device
 
-        if attention_mask is None:
+        if attention_mask_not_provided:
             attention_mask = torch.ones(input_shape, device=device)
-        if token_type_ids is None:
+        if token_type_ids_not_provided:
             token_type_ids = torch.zeros(input_shape, dtype=torch.long, device=device)
 
         # We can provide a self-attention mask of dimensions [batch_size, from_seq_length, to_seq_length]
@@ -545,21 +593,21 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
             # Provided a padding mask of dimensions [batch_size, seq_length]
             # - if the model is a decoder, apply a causal mask in addition to the padding mask
             # - if the model is an encoder, make the mask broadcastable to [batch_size, num_heads, seq_length, seq_length]
-            if self.config.is_decoder:
-                batch_size, seq_length = input_shape
-                seq_ids = torch.arange(seq_length, device=device)
-                causal_mask = (
-                    seq_ids[None, None, :].repeat(batch_size, seq_length, 1)
-                    <= seq_ids[None, :, None]
-                )
-                causal_mask = causal_mask.to(
-                    torch.long
-                )  # not converting to long will cause errors with pytorch version < 1.3
-                extended_attention_mask = (
-                    causal_mask[:, None, :, :] * attention_mask[:, None, None, :]
-                )
-            else:
-                extended_attention_mask = attention_mask[:, None, None, :]
+            #if self.config.is_decoder:
+            #    batch_size, seq_length = input_shape
+            #    seq_ids = torch.arange(seq_length, device=device)
+            #    causal_mask = (
+            #        seq_ids[None, None, :].repeat(batch_size, seq_length, 1)
+            #        <= seq_ids[None, :, None]
+            #    )
+            #    causal_mask = causal_mask.to(
+            #        torch.long
+            #    )  # not converting to long will cause errors with pytorch version < 1.3
+            #    extended_attention_mask = (
+            #        causal_mask[:, None, :, :] * attention_mask[:, None, None, :]
+            #    )
+            #else:
+            extended_attention_mask = attention_mask[:, None, None, :]
         else:
             raise ValueError(
                 "Wrong shape for input_ids (shape {}) or attention_mask (shape {})".format(
@@ -572,51 +620,54 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
         # positions we want to attend and -10000.0 for masked positions.
         # Since we are adding it to the raw scores before the softmax, this is
         # effectively the same as removing these entirely.
+        #extended_attention_mask = extended_attention_mask.to(
+        #    dtype=next(self.parameters()).dtype
+        #)  # fp16 compatibility ***Removing fp16 compatability becuase of torchscript
         extended_attention_mask = extended_attention_mask.to(
-            dtype=next(self.parameters()).dtype
-        )  # fp16 compatibility
+            dtype=torch.float32
+        )  # NOT fp16 compatibility
         extended_attention_mask = (1.0 - extended_attention_mask) * -10000.0
 
         # If a 2D ou 3D attention mask is provided for the cross-attention
         # we need to make broadcastabe to [batch_size, num_heads, seq_length, seq_length]
-        if self.config.is_decoder and encoder_hidden_states is not None:
-            (
-                encoder_batch_size,
-                encoder_sequence_length,
-                _,
-            ) = encoder_hidden_states.size()
-            encoder_hidden_shape = (encoder_batch_size, encoder_sequence_length)
-            if encoder_attention_mask is None:
-                encoder_attention_mask = torch.ones(encoder_hidden_shape, device=device)
-
-            if encoder_attention_mask.dim() == 3:
-                encoder_extended_attention_mask = encoder_attention_mask[:, None, :, :]
-            elif encoder_attention_mask.dim() == 2:
-                encoder_extended_attention_mask = encoder_attention_mask[
-                    :, None, None, :
-                ]
-            else:
-                raise ValueError(
-                    "Wrong shape for encoder_hidden_shape (shape {}) or encoder_attention_mask (shape {})".format(
-                        encoder_hidden_shape, encoder_attention_mask.shape
-                    )
-                )
-
-            encoder_extended_attention_mask = encoder_extended_attention_mask.to(
-                dtype=next(self.parameters()).dtype
-            )  # fp16 compatibility
-            encoder_extended_attention_mask = (
-                1.0 - encoder_extended_attention_mask
-            ) * -10000.0
-        else:
-            encoder_extended_attention_mask = None
+        #if self.config.is_decoder and not encoder_hidden_states_not_provided:
+        #    (
+        #        encoder_batch_size,
+        #        encoder_sequence_length,
+        #        _,
+        #    ) = encoder_hidden_states.size()
+        #    encoder_hidden_shape = (encoder_batch_size, encoder_sequence_length)
+        #    if encoder_attention_mask_not_provided:
+        #        encoder_attention_mask = torch.ones(encoder_hidden_shape, device=device)
+        #
+        #    if encoder_attention_mask.dim() == 3:
+        #        encoder_extended_attention_mask = encoder_attention_mask[:, None, :, :]
+        #    elif encoder_attention_mask.dim() == 2:
+        #        encoder_extended_attention_mask = encoder_attention_mask[
+        #            :, None, None, :
+        #        ]
+        #    else:
+         #       raise ValueError(
+         #           "Wrong shape for encoder_hidden_shape (shape {}) or encoder_attention_mask (shape {})".format(
+          #              encoder_hidden_shape, encoder_attention_mask.shape
+          #          )
+          #      )
+          # 
+          #  encoder_extended_attention_mask = encoder_extended_attention_mask.to(
+          #      dtype=next(self.parameters()).dtype
+          #  )  # fp16 compatibility
+          #  encoder_extended_attention_mask = (
+          #      1.0 - encoder_extended_attention_mask
+          #  ) * -10000.0
+        #else:
+        encoder_extended_attention_mask = None
 
         # Prepare head mask if needed
         # 1.0 in head_mask indicate we keep the head
         # attention_probs has shape bsz x n_heads x N x N
         # input head_mask has shape [num_heads] or [num_hidden_layers x num_heads]
         # and head_mask is converted to shape [num_hidden_layers x batch x num_heads x seq_length x seq_length]
-        if head_mask is not None:
+        if not head_mask_not_provided:
             if head_mask.dim() == 1:
                 head_mask = (
                     head_mask.unsqueeze(0).unsqueeze(0).unsqueeze(-1).unsqueeze(-1)
@@ -664,13 +715,8 @@ class CaMtlBaseEncoder(BertPreTrainedModel):
     def _create_task_type(self, task_id):
         task_type = task_id.clone()
         unique_task_ids = torch.unique(task_type)
-        unique_task_ids_list = (
-            unique_task_ids.cpu().numpy()
-            if unique_task_ids.is_cuda
-            else unique_task_ids.numpy()
-        )
-        for unique_task_id in unique_task_ids_list:
-            task_type[task_type == unique_task_id] = self.task_id_2_task_idx[
-                unique_task_id
+        for unique_task_id in unique_task_ids:
+            task_type[task_type == int(unique_task_id)] = self.task_id_2_task_idx[
+                int(unique_task_id)
             ]
         return task_type

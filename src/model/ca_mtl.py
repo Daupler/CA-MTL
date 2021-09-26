@@ -27,6 +27,13 @@ class CaMtlArguments:
                     "bert-base-uncased, bert-large-cased, bert-large-uncased"
         }
     )
+    encoder_type: str = field(
+        default=None,
+        metadata={
+            "help": "Identifier of encoder-type to use: CA-MTL-base, CA-MTL-large, bert-base-cased "
+                    "bert-base-uncased, bert-large-cased, bert-large-uncased"
+        }
+    )
 
 
 class CaMtl(BertPreTrainedModel):
@@ -39,7 +46,7 @@ class CaMtl(BertPreTrainedModel):
         super().__init__(config)
 
         self.data_args = data_args
-        self.bert = self._create_encoder(model_args.model_name_or_path)
+        self.bert = self._create_encoder(model_args.encoder_type)
         self.decoders = nn.ModuleList()
         for task in data_args.tasks:
             self.decoders.append(Decoder(config.hidden_size, task))
@@ -127,14 +134,14 @@ class CaMtl(BertPreTrainedModel):
 
         return outputs
 
-    def _create_encoder(self, model_name_or_path):
-        if model_name_or_path == "CA-MTL-large":
+    def _create_encoder(self, encoder_type):
+        if encoder_type == "CA-MTL-large":
             return CaMtlLargeEncoder(self.config, data_args=self.data_args)
-        elif model_name_or_path == "CA-MTL-base":
+        elif encoder_type == "CA-MTL-base":
             return CaMtlBaseEncoder(self.config, data_args=self.data_args)
-        elif model_name_or_path == "CA-MTL-base-uncased":
+        elif encoder_type == "CA-MTL-base-uncased":
             return CaMtlBaseEncoder(self.config, data_args=self.data_args)
-        elif model_name_or_path == "CA-MTL-tiny":
+        elif encoder_type == "CA-MTL-tiny":
             return CaMtlBaseEncoder(self.config, data_args=self.data_args)
         else:
             return _BertEncoder(self.config)

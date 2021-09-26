@@ -208,6 +208,10 @@ task_processors = {
     'SIGNT': D2Processor,
     'GTAG': D2Processor,
     'VEH': D2Processor,
+    'WATER': D1Processor,
+    'SEWER': D1Processor,
+    'DEFER': D1Processor,
+    'CODEENFORCEMENT': D1Processor,
 }
 
 task_output_modes = {
@@ -221,6 +225,10 @@ task_output_modes = {
     'SIGNT': "classification",
     'GTAG': "classification",
     'VEHT': "classification",
+    'WATER': "classification",
+    'SEWER': "classification",
+    'DEFER': "classification",
+    'CODEENFORCEMENT': "classification",
 }
 
 tasks_num_labels = {
@@ -234,4 +242,8 @@ tasks_num_labels = {
     'SIGNT': 12,
     'GTAG': 1,
     'VEHT': 1,
+    'WATER': 21,
+    'SEWER': 13,
+    'DEFER': 49,
+    'CODEENFORCEMENT': 18,
 }

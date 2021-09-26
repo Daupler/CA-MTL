@@ -1,0 +1,1 @@
+RuntimeError: CUDA out of memory. Tried to allocate 96.00 MiB (GPU 0; 10.91 GiB total capacity; 10.17 GiB already allocated; 13.56 MiB free; 10.32 GiB reserved in total by PyTorch)

@@ -20,11 +20,12 @@ class TaskDataset(Dataset):
         tokenizer: PreTrainedTokenizer,
         limit_length: Optional[int] = None,
         mode: Union[str, Split] = Split.train,
+        label_list: list = None,
     ):
         self.task_name = str(task_name)
         self.mode = mode
         self.features, self.labels = load_task_features(
-            task_name, task_id, args, tokenizer, mode, limit_length
+            task_name, task_id, args, tokenizer, mode, limit_length, label_list
         )
 
     def __len__(self) -> int:

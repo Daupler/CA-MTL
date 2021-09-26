@@ -88,6 +88,7 @@ docker run -v /data:$DATA_DIR $DOCKER_IMG --model_name_of_path CA-MTL-base --dat
 ### Usage 
 ```
 usage: run.py [-h] --model_name_or_path MODEL_NAME_OR_PATH --data_dir DATA_DIR
+              [--encoder_type]
               [--tasks TASKS [TASKS ...]] [--task_data_folders TASKS [TASK_DATA_FOLDERS ...]] 
               [--overwrite_cache]
               [--max_seq_length MAX_SEQ_LENGTH] --output_dir OUTPUT_DIR
@@ -117,6 +118,9 @@ arguments:
                         uncased, bert-large-cased, bert-large-uncased
   --data_dir DATA_DIR   The input data dir. Should contain the .tsv files (or
                         other data files) for the task.
+  --encoder-name        The string corresponding to the encoder type to be utilized by CAMtl
+                        This will default to the model_name_or_path if not passes. Only required
+                        when scoring a previously fine-tuned model
   --tasks TASKS [TASKS ...]
                         The task file that contains the tasks to train on. If
                         None all tasks will be used

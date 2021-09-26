@@ -1,0 +1,1 @@
+TypeError: new(): data must be a sequence (got builtin_function_or_method)

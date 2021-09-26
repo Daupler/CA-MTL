@@ -1,0 +1,26 @@
+{
+    "os": "Linux-4.19.0-10-amd64-x86_64-with-debian-10.5",
+    "python": "3.7.10",
+    "heartbeatAt": "2021-04-26T14:31:52.759809",
+    "startedAt": "2021-04-26T14:31:49.268211",
+    "docker": null,
+    "gpu": "GeForce GTX 1080 Ti",
+    "gpu_count": 1,
+    "cpu_count": 8,
+    "cuda": null,
+    "args": [
+        "-f",
+        "/home/datasci/.local/share/jupyter/runtime/kernel-456d0336-71bd-41f9-ba1a-f4464e3ba680.json"
+    ],
+    "state": "running",
+    "program": "CA-MTL/inference.ipynb",
+    "root": "/home/datasci/CA-MTL",
+    "git": {
+        "remote": "git@github.com:Daupler/CA-MTL.git",
+        "commit": "a3c55eb205948f844b0550896271485fbbbd05d2"
+    },
+    "email": "heat.grebe.763@gmail.com",
+    "host": "haswell",
+    "username": "datasci",
+    "executable": "/home/datasci/anaconda3/envs/ca-mtl-env/bin/python"
+}

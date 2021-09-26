@@ -1,0 +1,1 @@
+UnboundLocalError: local variable 'head_mask_provided' referenced before assignment
