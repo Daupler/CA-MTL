@@ -1,0 +1,35 @@
+{
+    "os": "Linux-4.19.0-10-amd64-x86_64-with-debian-10.5",
+    "python": "3.7.10",
+    "heartbeatAt": "2021-04-23T13:15:33.093690",
+    "startedAt": "2021-04-23T13:15:32.376567",
+    "docker": null,
+    "gpu": "GeForce GTX 1080 Ti",
+    "gpu_count": 1,
+    "cpu_count": 8,
+    "cuda": null,
+    "args": [
+        "--model_name_or_path",
+        "/hub/CA-MTL/mock_models/leafy-sky-42-9000",
+        "--data_dir",
+        "/hub/CA-MTL/data",
+        "--output_dir",
+        "/hub/CA-MTL/data/SCORED",
+        "--overwrite_cache",
+        "--task_data_folders",
+        "TOSCORE",
+        "--do_predict"
+    ],
+    "state": "running",
+    "program": "run_inference.py",
+    "codePath": "run_inference.py",
+    "git": {
+        "remote": "git@github.com:Daupler/CA-MTL.git",
+        "commit": "f3c354fc89cb8f130a9716b27dd1db40a31c22e6"
+    },
+    "email": "heat.grebe.763@gmail.com",
+    "root": "/home/datasci/CA-MTL",
+    "host": "haswell",
+    "username": "datasci",
+    "executable": "/home/datasci/anaconda3/envs/ca-mtl-env/bin/python"
+}

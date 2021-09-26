@@ -1,0 +1,1 @@
+{"SIGNT_Split.dev_loss": 0.2174706986794869, "SIGNT_Split.dev_matthews_corrcoef": 0.8880621654974488, "SIGNT_Split.dev_f1_micro": 0.9090909090909091, "SIGNT_Split.dev_f1_weighted": 0.9000494071146244, "epoch": 7.0, "step": 9268}
